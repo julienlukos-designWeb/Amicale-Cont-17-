@@ -62,6 +62,7 @@ dialog{border:0;border-radius:28px;padding:22px;width:min(94vw,460px);max-height
 .bg{margin-left:auto;background:#e11d48;color:#fff;border-radius:99px;font-size:11px;padding:2px 8px;font-style:normal}
 .me{margin-top:auto;border:1px solid #3a3360;border-radius:22px;padding:12px;background:#231d45}.me .rw0{display:flex;gap:12px;align-items:center;margin-bottom:12px}.me b{display:block}
 .out{display:flex;gap:8px;align-items:center;justify-content:center;width:100%;padding:12px;border-radius:15px;border:2px solid #f59e0b;background:#3a3360;font-weight:700;text-align:center}
+.ft{border-top:1px solid var(--line);margin-top:26px;padding:18px 0 6px;text-align:center;color:var(--mut);font-size:14px}.ft b{color:var(--ink)}.lc .ft{margin-top:16px;padding-top:14px;color:#6d6888}.lc .ft b{color:#1a1633}
 .lgn{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 15% 10%,rgba(124,58,237,.65),transparent 50%),radial-gradient(circle at 90% 30%,rgba(190,24,93,.5),transparent 50%),radial-gradient(circle at 60% 100%,rgba(16,185,129,.4),transparent 55%),#160f2e}
 .lc{background:#fff;color:#1a1633;border-radius:32px;padding:24px;width:100%;max-width:420px}.lc .sub{color:#6d6888}.lc input{background:#fff;color:#1a1633;border-radius:999px;border-color:#d9d3ee;padding:15px 20px}.lc .seg{background:#efecf8}.lc .seg button{color:#5d5879}.lc .seg .on{background:#fff;color:#7c3aed}.err{color:#e11d48;font-weight:600;margin:0 0 10px}
 @media(min-width:1000px){#dw{transform:none;width:300px}.mb{display:none}#ov{display:none!important}.top,main{margin-left:300px}main{max-width:960px;margin-right:auto;padding:28px 36px}.stats{grid-template-columns:repeat(4,1fr)}}
@@ -114,7 +115,7 @@ if(!U){$("root").innerHTML=`<div class="lgn"><div class="lc"><div class="rw" sty
 <div class="seg"><button class="${lt=="in"?"on":""}" onclick="lt='in';err='';render()">Connexion</button><button class="${lt=="up"?"on":""}" onclick="lt='up';err='';render()">Créer un compte</button></div>
 <h1 style="font-size:26px">${lt=="in"?"Bon retour parmi nous":"Rejoignez l’amicale"}</h1><p class="sub">${lt=="in"?"Connectez-vous avec votre numéro de téléphone.":"Un administrateur validera votre compte."}</p>
 ${lt=="up"?'<input id="lf" placeholder="Prénom"><input id="ln" placeholder="Nom">':""}<input id="lp" type="tel" placeholder="Numéro de téléphone"><input id="lw" type="password" placeholder="Mot de passe">${err?`<p class="err">${err}</p>`:""}
-<button class="b3" style="--a:#a78bfa;--b:#7c3aed;--d:#5b21b6;width:100%;justify-content:center;padding:15px;margin:0" onclick="${lt=="in"?"login()":"signup()"}">${lt=="in"?"Se connecter":"Créer mon compte"}</button></div></div>`;return}
+<button class="b3" style="--a:#a78bfa;--b:#7c3aed;--d:#5b21b6;width:100%;justify-content:center;padding:15px;margin:0" onclick="${lt=="in"?"login()":"signup()"}">${lt=="in"?"Se connecter":"Créer mon compte"}</button><div class="ft">Plateforme créée par <b>Julien D. Y. Lukos</b></div></div></div>`;return}
 const pc=S.users.filter(u=>u.pend).length,vis=N.filter(n=>!n[6]||adm()),
 mi=n=>`<button class="mi ${n[0]==cur?"on":""}" onclick="go('${n[0]}')"><span class="ti" style="--a:${n[3]};--b:${n[4]};--d:${n[5]}">${ic(n[2],20)}</span>${n[1]}${n[0]=="mem"&&pc?`<em class="bg">${pc}</em>`:""}</button>`;
 $("root").innerHTML=`<header class="top"><button class="mb" onclick="sheet=1;render()">${ic("menu",22)}</button>${lg(40)}<b>${esc(S.name)}</b></header>
@@ -122,7 +123,7 @@ $("root").innerHTML=`<header class="top"><button class="mb" onclick="sheet=1;ren
 <aside id="dw" class="${sheet?"open":""}"><div class="hd">${lg(56)}<div><b>${esc(S.name)}</b><small>${esc(S.tag)}</small></div></div>
 <div class="cap">MENU</div>${vis.filter(n=>!n[6]).map(mi).join("")}${adm()?`<div class="cap">ADMINISTRATION</div>`+vis.filter(n=>n[6]).map(mi).join(""):""}
 <div class="me"><div class="rw0"><div class="av">${ini(U.n)}</div><div><b>${esc(U.n)}</b><small>${adm()?"Administrateur":"Membre"}</small></div></div><button class="out" onclick="out()">${ic("out",18)}Déconnexion</button></div></aside>
-<main>${V[cur]()}</main>`}
+<main>${V[cur]()}<div class="ft">Plateforme créée par <b>Julien D. Y. Lukos</b></div></main>`}
 async function login(){const p=$("lp").value.trim(),w=$("lw").value;err="";if(!p||!w){err="Veuillez remplir tous les champs.";return render()}
 const {data,error}=await sb.auth.signInWithPassword({email:emailOf(p),password:w});
 if(error){err="Numéro ou mot de passe incorrect.";return render()}
@@ -159,6 +160,9 @@ const head=(t,fn,s)=>`<div class="rw" style="margin-bottom:16px"><div><h1 style=
 const txRows=(n,d)=>[...S.tx].sort((a,b)=>b.d.localeCompare(a.d)).slice(0,n).map(t=>`<div class="ro"><span class="ic ${t.m<0?"out":"in"}">${ic(t.m<0?"down":"up",18)}</span><div class="m"><b>${esc(t.l)}</b><span>${fd(t.d)}${t.c?" · "+esc(t.c):""}</span></div><span class="${t.m<0?"ko":"ok"}">${t.m<0?"−":"+"}${fc(Math.abs(t.m))}</span>${d&&adm()?`<button class="ib" onclick="del('tx',${S.tx.indexOf(t)})">${ic("trash",17)}</button>`:""}</div>`).join("")||'<p class="sub">Aucune opération.</p>';
 const empty='<p class="sub" style="margin:0">Rien pour le moment.</p>';
 const textList=k=>`<div class="card">${S[k].map((x,i)=>`<div class="ro" style="align-items:flex-start"><span class="ic">${ic(k=="infos"?"mega":"book",18)}</span><div class="m"><b>${esc(x.t)}</b><span>${fd(x.d)}</span><p style="margin:6px 0 0">${esc(x.c)}</p></div>${adm()?`<button class="ib" onclick="del('${k}',${i})">${ic("trash",17)}</button>`:""}</div>`).join("")||empty}</div>`;
+const chart=ks=>{if(!ks.length)return'<p class="sub" style="margin:18px 0 4px;text-align:center">Aucune opération enregistrée pour le moment.</p>';
+const W=600,H=190,mx=Math.max(...ks.map(k=>k[1]),1),px=i=>ks.length>1?36+i*(W-72)/(ks.length-1):W/2,py=v=>H-34-(Math.max(v,0)/mx)*(H-80),pts=ks.map((k,i)=>px(i)+","+py(k[1])).join(" "),lb=v=>v>=1000?Math.round(v/1000)+"k":Math.round(v);
+return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;margin-top:14px"><defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6" stop-opacity=".45"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></linearGradient></defs>${ks.length>1?`<polygon points="${px(0)},${H-34} ${pts} ${px(ks.length-1)},${H-34}" fill="url(#gr)"/>`:""}<polyline points="${pts}" fill="none" stroke="#7c3aed" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>${ks.map((k,i)=>`<circle cx="${px(i)}" cy="${py(k[1])}" r="6" fill="#fff" stroke="#7c3aed" stroke-width="3"/><text x="${px(i)}" y="${py(k[1])-14}" text-anchor="middle" font-size="12" font-weight="700" fill="#7c3aed">${lb(k[1])}</text><text x="${px(i)}" y="${H-10}" text-anchor="middle" font-size="13" fill="#8a85a6">${k[0].slice(5)}/${k[0].slice(2,4)}</text>`).join("")}</svg>`};
 const V={
 dash(){const ent=sum(t=>t.m>0),dep=-sum(t=>t.m<0),li=S.infos[0],pc=S.users.filter(u=>u.pend).length,mo={};
 S.tx.forEach(t=>{const k=t.d.slice(0,7);mo[k]=(mo[k]||0)+t.m});let run=0;const ks=Object.keys(mo).sort().map(k=>[k,run+=mo[k]]).slice(-6),mx=Math.max(...ks.map(k=>Math.abs(k[1])),1);
@@ -170,7 +174,7 @@ ${adm()&&pc?`<div class="card last" onclick="go('mem')" style="border-color:#f59
 ${li?`<div class="card last" onclick="go('inf')"><span class="ti" style="--a:#38bdf8;--b:#2563eb;--d:#1e3a8a">${ic("mega",22)}</span><div><small>Dernière info</small><b>${esc(li.t)}</b></div><span class="mut">Lire</span></div>`:""}
 <div class="stats">${st("Solde en caisse",fc(ent-dep),"wallet","#8b5cf6","#5b21b6","#3b0f8c")}${st("Total des entrées",fc(ent),"up","#34d399","#047857","#065f46")}${st("Total des dépenses",fc(dep),"down","#fb923c","#be123c","#9f1239")}${st("Membres actifs",S.nActive,"users","#fcd34d","#d97706","#b45309","#3b1d00")}</div>
 <div class="card"><div class="rw" style="flex-wrap:nowrap"><div><b class="ct">Évolution de la caisse</b><div class="sub" style="margin:0">Solde sur les 6 derniers mois</div></div><button class="vb" onclick="go('cai')">Voir la caisse</button></div>
-<div class="bars">${ks.map(k=>`<div><b style="height:${Math.max(6,Math.abs(k[1])/mx*100)}px"></b>${k[0].slice(5)}/${k[0].slice(2,4)}</div>`).join("")}</div></div>`},
+${chart(ks)}</div>`},
 cai(){const e=sum(t=>t.m>0),d=-sum(t=>t.m<0);return head("Caisse","","Suivi du budget en caisse")+`<div class="hero"><small>Solde actuel</small><div class="bal" style="margin-bottom:${adm()?16:0}px">${fc(e-d)}</div>${adm()?`<div class="bts" style="margin:0"><button class="bt t1 s" onclick="addTx(1)">${ic("up",16)}Entrée</button><button class="bt t2 s" onclick="addTx(-1)">${ic("down",16)}Dépense</button></div>`:""}</div><div class="card">${txRows(999,1)}</div>`},
 inf(){return head("Infos","addInf","Annonces de l’amicale")+textList("infos")},
 pag(){return head("Pages","addPag","Pages d’information")+textList("pages")},
