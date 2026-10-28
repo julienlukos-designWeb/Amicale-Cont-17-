@@ -59,6 +59,25 @@ V.dash=function(){
   const card=`<div class="card last" onclick="go('cot')"><span class="ti" style="--a:#f472b6;--b:#db2777;--d:#9d174d">${ic("check",22)}</span><div><small>Mes cotisations</small><b>${fc(paid(U.id))} versés</b></div><span class="mut">Voir</span></div>`;
   return _d.call(V).replace('<div class="stats">',card+'<div class="stats">')};
 
+// Progression de tous les membres (visible par chaque membre)
+window.openProg=async y=>{
+  const PY=y||Math.max(2026,new Date().getFullYear()),d=$("dg");
+  d.innerHTML='<p class="sub">Chargement…</p>';if(!d.open)d.showModal();
+  const {data,error}=await sb.rpc("member_progress",{p_year:PY});
+  if(error){d.innerHTML=`<p class="err">Erreur : ${esc(error.message)}</p><button class="bt t4 s" onclick="$('dg').close()">Fermer</button>`;return}
+  const t=tgt(PY),L=(data||[]).map(x=>({id:x.member_id,n:x.name,p:+x.paid})).sort((a,b)=>b.p-a.p||a.n.localeCompare(b.n)),
+  ok=L.filter(x=>x.p>=t).length,tot=L.reduce((a,x)=>a+x.p,0),
+  yb=yrs().reverse().map(a=>`<button class="${a==PY?"on":""}" onclick="openProg(${a})">${a}</button>`).join("");
+  d.innerHTML=`<h2 style="margin:0 0 12px;font-size:18px">Cotisations des membres</h2><div class="seg">${yb}</div>`
+    +`<p class="sub">Objectif ${fc(t)} par membre · ${ok} sur ${L.length} ont soldé · Total ${fc(tot)}</p>`
+    +L.map(x=>`<div class="ro"><div class="av">${ini(x.n)}</div><div class="m"><b>${esc(x.n)}${x.id==U.id?" (vous)":""}</b>${bar(x.p,t)}<span>Versé ${fc(x.p)} · Reste ${fc(Math.max(0,t-x.p))}</span></div>${x.p>=t?'<span class="tg">Soldé</span>':x.p>0?'<span class="tg w">En cours</span>':'<span class="tg x">Aucun</span>'}</div>`).join("")
+    +`<div style="margin-top:12px"><button class="bt t4 s" onclick="$('dg').close()">Fermer</button></div>`};
+
+const _cv=V.cot;
+V.cot=function(){
+  const b=`<button class="b3" style="--a:#60a5fa;--b:#2563eb;--d:#1e3a8a;width:100%;justify-content:center;margin-bottom:16px" onclick="openProg()">${ic("users",18)}Voir les cotisations des membres</button>`;
+  return _cv.call(V).replace('<div class="hero">',b+'<div class="hero">')};
+
 // Si l'utilisateur était déjà chargé avant ce module, on recharge
 if(U)loadAll().then(render);
 })();
