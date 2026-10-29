@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="A.M.D">
+<meta name="apple-mobile-web-app-title" content="Contingents 17">
 <title>Amicale Contingents 17</title>
 <style>
 :root{--bg:#0b0d12;--tx:#f3f5fa;--mu:#9aa3b5;--bd:rgba(255,255,255,.08);--ln:rgba(255,255,255,.08)}
@@ -73,15 +73,15 @@ select.f{appearance:auto}
 <div id="app"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-const SB = supabase.createClient('https://fwodbaildriqkmpplutj.supabase.co', 'sb_publishable_yDfRe6HmyHgGVo1AuuosYg_h9LDlWLA');
-const SLOGAN = 'Foula - Fiit - Fayda';
-let BR = { name: 'A.M.D', logo: 'logo.png' };
+const SB = supabase.createClient('https://qyawgfovjauxjzwdwdqk.supabase.co', 'sb_publishable_LFBLWE9Pd9-yzKW_Prc1kw_7Gs5amQh');
+const SLOGAN = 'Unis pour construire demain';
+let BR = { name: 'Amicale Projet Contingents 17 Fatick', logo: 'logo.png' };
 const logo = () => BR.logo ? `<img src="${esc(BR.logo)}" alt="Logo" onerror="this.outerHTML='Logo'">` : 'Logo';
 const FOOT = 'Administrateur et créateur: Julien D. Y. LUKOS';
 const $ = s => document.querySelector(s);
 const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const digits = p => String(p).replace(/\D/g, '');
-const mail = p => digits(p) + '@amicale-c17.com';
+const mail = p => digits(p) + '@amicale.app';
 let me = null, page = 'home', menu = false, tab = 'in', msg = '';
 const isAdm = () => me && ['admin', 'owner'].includes(me.role);
 const isOwn = () => me && me.role === 'owner';
@@ -101,7 +101,7 @@ async function boot() {
   const { data: { session } } = await SB.auth.getSession();
   me = null;
   if (session) {
-    const { data } = await SB.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
+    const { data } = await SB.from('amicale_profiles').select('*').eq('id', session.user.id).maybeSingle();
     me = data;
     if (!me) { await SB.auth.signOut(); msg = 'Compte introuvable. Crée un compte.'; }
   }
@@ -122,17 +122,22 @@ function authView() {
   <div class="ft">${FOOT}</div></div>`;
 }
 function setTab(t) { tab = t; msg = ''; render(); }
+const phoneVariants = p => { const d = digits(p).replace(/^00/, ''), loc = d.startsWith('221') && d.length > 9 ? d.slice(3) : d; return [...new Set([d, loc, '221' + loc])]; };
 async function signin(e) {
-  e.preventDefault(); const f = new FormData(e.target);
-  const { error } = await SB.auth.signInWithPassword({ email: mail(f.get('ph')), password: f.get('pw') });
-  if (error) { msg = 'Numéro ou mot de passe incorrect.'; return render(); }
-  msg = ''; boot();
+  e.preventDefault(); const f = new FormData(e.target); let err = null;
+  for (const v of phoneVariants(f.get('ph'))) {
+    const { error } = await SB.auth.signInWithPassword({ email: mail(v), password: f.get('pw') });
+    if (!error) { msg = ''; return boot(); }
+    err = error; if (!/invalid login/i.test(error.message)) break;
+  }
+  msg = /invalid login/i.test(err.message) ? 'Numéro ou mot de passe incorrect.' : /not confirmed/i.test(err.message) ? 'Compte non confirmé : désactive « Confirm email » dans Supabase (Authentication).' : err.message;
+  render();
 }
 async function signup(e) {
-  e.preventDefault(); const f = new FormData(e.target); const ph = digits(f.get('ph'));
+  e.preventDefault(); const f = new FormData(e.target); const ph = phoneVariants(f.get('ph'))[1];
   if (ph.length < 6) { msg = 'Numéro de téléphone invalide.'; return render(); }
   const { error } = await SB.auth.signUp({ email: mail(ph), password: f.get('pw'),
-    options: { data: { first_name: f.get('fn').trim(), last_name: f.get('ln').trim(), phone: ph } } });
+    options: { data: { app: 'amicale', first_name: f.get('fn').trim(), last_name: f.get('ln').trim(), phone: ph } } });
   if (error) { msg = /registered|already/i.test(error.message) ? 'Ce numéro est déjà inscrit.' : error.message; return render(); }
   msg = ''; boot();
 }
@@ -148,7 +153,7 @@ const TITRES = { settings: 'Paramètres', home: 'Accueil', profile: 'Mon profil'
 const stat = (l, v, fn, c) => `<button class="b stat" style="--c:${COL[c][0]};--d:${COL[c][1]}" onclick="${fn}"><span>${l}</span><b>${v}</b></button>`;
 Object.assign(IC, { star: 'M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z', bell: 'M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9M10 21a2 2 0 004 0', doc: 'M7 3h8l4 4v14H7zM15 3v4h4M10 12h6M10 16h6', image: 'M4 5h16v14H4zM4 15l5-5 4 4 3-3 4 4M9 9h.01', cal: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4', heart: 'M12 21s-8-5-8-11a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 10c0 6-8 11-8 11z', mega: 'M3 11v3h4l8 5V6L7 11zM18 9a4 4 0 010 6' });
 const PK = { honneur: { t: "Page d'honneur", ex: 'Titre ou année', thumb: 1 }, rappel: { t: 'Rappel important' }, annonce: { t: 'Annonces' }, statuts: { t: 'Statuts', pdf: 1 }, reglement: { t: 'Règlement intérieur', pdf: 1 }, image: { t: "Images de l'amicale", noTitle: 1 }, morts: { t: 'À nos morts', ex: 'Naissance – Décès', thumb: 1 } };
-Object.keys(PK).forEach(k => TITRES[k] = PK[k].t); TITRES.event = 'Situation du membre';
+Object.keys(PK).forEach(k => TITRES[k] = PK[k].t); TITRES.event = 'Situation du membre'; TITRES.pay = 'Payer ma cotisation'; TITRES.payments = 'Paiements à vérifier';
 const EVL = { fiancailles: 'Fiançailles', mariage: 'Mariage', circoncision: 'Circoncision', communion: 'Communion', bapteme: 'Baptême', deces: 'Décès' };
 const REL = { pere: 'Père', mere: 'Mère', enfant: 'Enfant', conjoint: 'Conjoint(e)' };
 function go(p) { page = p; menu = false; render(); }
@@ -167,8 +172,8 @@ function render() {
   <main id="c" class="pg"><div class="s">Chargement…</div></main><div class="ft">${FOOT}</div>
   <div class="ov ${menu ? 'on' : ''}" onclick="tog()"></div>
   <nav class="dr ${menu ? 'on' : ''}"><div class="dh"><i class="lo" style="width:46px;height:46px">${logo()}</i><b>${esc(BR.name)}</b></div>
-  ${item('home', 'Accueil', 'home')}${item('profile', 'Mon profil', 'user')}${item('honneur', "Page d'honneur", 'star')}${item('rappel', 'Rappel important', 'bell')}${item('annonce', 'Annonces', 'mega')}${item('statuts', 'Statuts', 'doc')}${item('reglement', 'Règlement intérieur', 'doc')}${item('budget', 'État du budget', 'wallet')}${item('situation', 'Situation des membres', 'users')}${item('image', "Images de l'amicale", 'image')}${item('morts', 'À nos morts', 'heart')}
-  ${isAdm() ? `<button class="i ${page === 'requests' ? 'a' : ''}" onclick="go('requests')">${ico('inbox')}Demandes d'inscription<span class="bdg" id="bd-req"></span></button>` + item('members', 'Membres', 'list') + item('settings', 'Paramètres', 'gear') : ''}
+  ${item('home', 'Accueil', 'home')}${item('profile', 'Mon profil', 'user')}${item('pay', 'Payer ma cotisation', 'wallet')}${item('honneur', "Page d'honneur", 'star')}${item('rappel', 'Rappel important', 'bell')}${item('annonce', 'Annonces', 'mega')}${item('statuts', 'Statuts', 'doc')}${item('reglement', 'Règlement intérieur', 'doc')}${item('budget', 'État du budget', 'wallet')}${item('situation', 'Situation des membres', 'users')}${item('image', "Images de l'amicale", 'image')}${item('morts', 'À nos morts', 'heart')}
+  ${isAdm() ? `<button class="i ${page === 'requests' ? 'a' : ''}" onclick="go('requests')">${ico('inbox')}Demandes d'inscription<span class="bdg" id="bd-req"></span></button>` + `<button class="i ${page === 'payments' ? 'a' : ''}" onclick="go('payments')">${ico('wallet')}Paiements à vérifier<span class="bdg" id="bd-pay"></span></button>` + item('members', 'Membres', 'list') + item('settings', 'Paramètres', 'gear') : ''}
   <button class="i" onclick="logout()">${ico('out')}Se déconnecter</button><div class="sp">${FOOT}</div></nav>`;
   setBadges(); refreshPending(); fill();
 }
@@ -181,16 +186,19 @@ async function fill() {
   else if (page === 'budget') h = await budgetV();
   else if (page === 'situation') h = await situationV();
   else if (page === 'event') h = await eventV();
+  else if (page === 'pay') h = await payV();
+  else if (page === 'payments') h = await paymentsV();
   else if (PK[page]) h = await postsV(page);
   else if (page === 'requests') h = await listV(['pending', 'rejected'], true);
   else h = await listV(['active', 'disabled', 'deleted'], false);
   if (c) c.innerHTML = h;
+  if (page === 'payments') loadShots();
 }
 
 const ST = { pending: ['En attente', '#c2410c'], rejected: ['Rejeté', '#b91c1c'], active: ['Actif', '#15803d'], disabled: ['Désactivé', '#4b5563'], deleted: ['Supprimé', '#b91c1c'] };
 const RL = { owner: ['Propriétaire', '#b45309'], admin: ['Administrateur', '#7c3aed'] };
 async function listV(statuses, req) {
-  const { data, error } = await SB.from('profiles').select('*').in('status', statuses).order('created_at', { ascending: false });
+  const { data, error } = await SB.from('amicale_profiles').select('*').in('status', statuses).order('created_at', { ascending: false });
   if (error) return `<div class="err">${esc(error.message)}</div>`;
   if (!data.length) return `<div class="c s">${req ? 'Aucune demande en attente.' : 'Aucun membre.'}</div>`;
   MB = {}; data.forEach(p => MB[p.id] = p);
@@ -214,17 +222,17 @@ async function listV(statuses, req) {
   return `<div style="font-weight:700;font-size:16px">${req ? data.length + ' demande(s)' : data.length + ' compte(s)'}</div>${req ? '' : searchBox()}${rows}`;
 }
 async function act(id, status) {
-  const { error } = await SB.from('profiles').update({ status }).eq('id', id);
+  const { error } = await SB.from('amicale_profiles').update({ status }).eq('id', id);
   if (error) alert(error.message); fill();
 }
 async function setRole(id, role) {
-  const { error } = await SB.from('profiles').update({ role }).eq('id', id);
+  const { error } = await SB.from('amicale_profiles').update({ role }).eq('id', id);
   if (error) alert(error.message); fill();
 }
 function del(id) { if (confirm('Supprimer ce compte ? Il pourra être restauré plus tard.')) act(id, 'deleted'); }
 
 
-const YEAR = new Date().getFullYear();
+const YEAR = new Date().getFullYear(), MIN = 5000;
 const num = n => Number(n || 0).toLocaleString('fr-FR');
 const fcfa = n => num(n) + ' FCFA';
 const dfr = d => new Date(d + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
@@ -237,38 +245,41 @@ async function trancheAmt() {
 
 async function homeV() {
   const hr = new Date().getHours(), hello = hr >= 18 || hr < 5 ? 'Bonsoir' : 'Bonjour';
-  const [{ data: n }, { data: sm }, { data: ps }, { count: pend }] = await Promise.all([SB.rpc('active_members_count'), SB.rpc('budget_summary'),
+  const [{ data: n }, { data: sm }, { data: ps }, { count: pend }, { count: pendPay }] = await Promise.all([SB.rpc('amicale_active_members_count'), SB.rpc('amicale_budget_summary'),
     SB.from('amicale_posts').select('kind,title,body,created_at').in('kind', ['rappel', 'annonce']).order('created_at', { ascending: false }).limit(8),
-    isAdm() ? SB.from('profiles').select('id', { count: 'exact', head: true }).eq('status', 'pending') : Promise.resolve({ count: 0 })]);
-  if (isAdm()) { PENDING = pend || 0; setBadges(); }
+    isAdm() ? SB.from('amicale_profiles').select('id', { count: 'exact', head: true }).eq('status', 'pending') : Promise.resolve({ count: 0 }),
+    isAdm() ? SB.from('amicale_payments').select('id', { count: 'exact', head: true }).eq('status', 'pending') : Promise.resolve({ count: 0 })]);
+  if (isAdm()) { PENDING = pend || 0; PENDPAY = pendPay || 0; setBadges(); }
   const b = sm || { entrees: 0, depenses: 0, prev_entrees: 0, prev_depenses: 0 };
   const d = new Date(), pm = new Date(d.getFullYear(), d.getMonth() - 1, 1).toLocaleDateString('fr-FR', { month: 'short' });
   const rap = (ps || []).find(p => p.kind === 'rappel'), ann = (ps || []).filter(p => p.kind === 'annonce').slice(0, 2);
   return `<div style="padding:2px 4px"><div class="s">${d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</div><div style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin-top:2px">${hello}, ${esc(me.first_name)}</div></div>
+  ${pendPay ? btn(ico('wallet') + pendPay + (pendPay > 1 ? ' paiements' : ' paiement') + ' à vérifier', "go('payments')", 'green') : ''}
   ${pend ? btn(ico('inbox') + pend + (pend > 1 ? ' demandes' : ' demande') + " d'inscription en attente", "go('requests')", 'or') : ''}
   <div class="c" style="background:linear-gradient(135deg,#15803d,#166534)"><div style="font-size:13px;color:#d1fae5">Somme globale disponible en caisse</div><div style="font-size:30px;font-weight:800;margin-top:6px">${fcfa((b.opening || 0) + b.entrees - b.depenses)}</div></div>
   <div class="g3">${stat('Membres actifs', n ?? 0, "go('situation')", 'blue')}${stat('Entrées ' + pm, num(b.prev_entrees), "go('budget')", 'green')}${stat('Dépenses ' + pm, num(b.prev_depenses), "go('budget')", 'red')}</div>
-  <div class="q">${btn(ico('wallet') + 'État du budget', "go('budget')", 'blue')}${btn(ico('user') + 'Mon profil', "go('profile')", 'green')}${isAdm() ? btn(ico('users') + 'Situation', "go('situation')", 'teal') + btn(ico('inbox') + 'Demandes' + (pend ? ' (' + pend + ')' : ''), "go('requests')", 'or') : btn(ico('users') + 'Situation des membres', "go('situation')", 'teal').replace('class="b"', 'class="b wide"')}</div>
+  <div class="q">${btn(ico('wallet') + 'État du budget', "go('budget')", 'blue')}${btn(ico('wallet') + 'Payer ma cotisation', "go('pay')", 'green')}${isAdm() ? btn(ico('users') + 'Situation', "go('situation')", 'teal') + btn(ico('inbox') + 'Demandes' + (pend ? ' (' + pend + ')' : ''), "go('requests')", 'or') : btn(ico('users') + 'Situation des membres', "go('situation')", 'teal').replace('class="b"', 'class="b wide"')}</div>
   ${rap ? `<div class="c" style="background:linear-gradient(135deg,#7f1d1d,#451a1a)"><div style="font-weight:800;font-size:13px;color:#fecaca">RAPPEL IMPORTANT</div><div style="font-weight:700;margin-top:6px">${esc(rap.title)}</div><div style="font-size:14px;margin-top:4px;line-height:1.4;white-space:pre-wrap">${esc(rap.body)}</div></div>` : ''}
   ${ann.length ? `<div class="c"><div style="font-weight:700;padding-bottom:4px">Dernières annonces</div>${ann.map(a => `<div class="row"><div><div>${esc(a.title)}</div><div class="s">${dfr(a.created_at.slice(0, 10))}</div></div></div>`).join('')}</div>` : ''}`;
 }
 
 async function profileV() {
-  const [amt, { data: pay }, { data: ov }, { data: evs }] = await Promise.all([trancheAmt(),
-    SB.from('amicale_tranches').select('id,tranche,validated_at').eq('member_id', me.id).eq('year', YEAR),
-    SB.rpc('members_overview', { y: YEAR }), SB.from('amicale_events').select('*').eq('member_id', me.id).eq('kind', 'deces')]);
-  const get = t => (pay || []).find(x => x.tranche === t);
-  const paid = (pay || []).length * amt, tot = amt * 2, pct = tot ? Math.min(100, Math.round(paid * 100 / tot)) : 0;
-  const row = t => { const p = get(t); return `<div class="row"><div>Tranche ${t} · ${num(amt)}<div class="s">${p ? 'Payée le ' + dfr(p.validated_at) : 'À payer'}</div></div><span class="tag" style="background:${p ? '#15803d' : '#c2410c'}">${p ? 'Payée' : 'En attente'}</span></div>`; };
+  const [{ data: ov }, { data: evs }, { data: pays }] = await Promise.all([SB.rpc('amicale_members_overview', { y: YEAR }),
+    SB.from('amicale_events').select('*').eq('member_id', me.id).eq('kind', 'deces'),
+    SB.from('amicale_payments').select('*').eq('member_id', me.id).eq('year', YEAR).order('created_at', { ascending: false })]);
+  const o = (ov || []).find(x => x.member_id === me.id) || { paid: 0, target: 0, fiancailles: 0, baptemes: 0, deces: 0 };
+  const pct = o.target ? Math.min(100, Math.round(o.paid * 100 / o.target)) : 0, rest = Math.max(0, o.target - o.paid);
+  const stT = { validated: ['Validé', '#15803d'], pending: ['En attente', '#c2410c'], rejected: ['Refusé', '#b91c1c'] };
+  const prow = (pays || []).map(x => `<div class="row"><div>${fcfa(x.amount)}<div class="s">${dfr(x.created_at.slice(0, 10))}${x.note ? ' · ' + esc(x.note) : ''}</div></div><span class="tag" style="background:${stT[x.status][1]}">${stT[x.status][0]}</span></div>`).join('');
   const r = RL[me.role];
-  const o = (ov || []).find(x => x.member_id === me.id) || { fiancailles: 0, baptemes: 0, deces: 0 };
   const fi = o.fiancailles >= 1, ma = o.groupe === 'mariage';
   const er = (t, sub, tg, col) => `<div class="row"><div>${t}<div class="s">${sub}</div></div><span class="tag" style="background:${col}">${tg}</span></div>`;
   const G = '#15803d', X = '#4b5563';
   return `<div class="c" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)"><div class="m"><div style="font-weight:800;font-size:18px">${esc(me.first_name)} ${esc(me.last_name)}</div>${r ? `<span class="tag" style="background:${r[1]}">${r[0]}</span>` : ''}</div><div style="font-size:13px;color:#dbe6ff;margin-top:4px">${esc(me.phone)}</div></div>
-  <div class="c" style="background:linear-gradient(135deg,#15803d,#166534)"><div style="font-size:13px;color:#d1fae5">Cotisations ${YEAR}</div><div style="font-size:24px;font-weight:800;margin-top:4px">${num(paid)} / ${num(tot)} FCFA</div>
-  <div style="height:12px;border-radius:6px;background:#14532d;margin-top:10px;overflow:hidden"><div style="width:${pct}%;height:100%;background:#86efac"></div></div><div style="font-size:13px;color:#d1fae5;margin-top:6px">${pct} % payé</div></div>
-  <div class="c" style="padding-top:6px;padding-bottom:6px">${row(1)}${row(2)}</div>
+  <div class="c" style="background:linear-gradient(135deg,#15803d,#166534)"><div style="font-size:13px;color:#d1fae5">Cotisation ${YEAR}</div><div style="font-size:24px;font-weight:800;margin-top:4px">${num(o.paid)} / ${num(o.target)} FCFA</div>
+  <div style="height:12px;border-radius:6px;background:#14532d;margin-top:10px;overflow:hidden"><div style="width:${pct}%;height:100%;background:#86efac"></div></div><div style="font-size:13px;color:#d1fae5;margin-top:6px">${rest ? 'Reste ' + fcfa(rest) + ' · ' + pct + ' % versé' : 'Objectif atteint, merci !'}</div></div>
+  ${btn(ico('wallet') + 'Payer ma cotisation', "go('pay')", 'blue')}
+  <div class="c" style="padding-top:8px;padding-bottom:8px"><div style="font-weight:700;padding:6px 0">Mes versements ${YEAR}</div>${prow || '<div class="s" style="padding:8px 0">Aucun versement pour le moment. Versement minimum : ' + fcfa(MIN) + '.</div>'}</div>
   <div class="c" style="padding-top:8px;padding-bottom:8px"><div class="m" style="padding:6px 0;flex-wrap:wrap"><b>Mes événements</b><div style="display:flex;gap:6px"><span class="tag" style="background:${fi ? G : X}">Fiancé(e) : ${fi ? 'Oui' : 'Non'}</span><span class="tag" style="background:${ma ? G : X}">Marié(e) : ${ma ? 'Oui' : 'Non'}</span></div></div>
   ${er('Fiançailles', 'Limite : 1', o.fiancailles + '/1', fi ? X : G)}
   ${er('Mariage, circoncision ou communion', o.groupe ? EVL[o.groupe] + ' célébré' : 'Un seul des trois · limite 1', (o.groupe ? 1 : 0) + '/1', o.groupe ? X : G)}
@@ -288,7 +299,7 @@ async function budgetV() {
   const now = new Date(); if (!BM) BM = { y: now.getFullYear(), m: now.getMonth() + 1 };
   const p2 = n => String(n).padStart(2, '0');
   const d0 = `${BM.y}-${p2(BM.m)}-01`, d1 = BM.m === 12 ? `${BM.y + 1}-01-01` : `${BM.y}-${p2(BM.m + 1)}-01`;
-  const [{ data: sm }, { data: mo }, { data: list, error }] = await Promise.all([SB.rpc('budget_summary'), SB.rpc('budget_month', { y: BM.y, m: BM.m }),
+  const [{ data: sm }, { data: mo }, { data: list, error }] = await Promise.all([SB.rpc('amicale_budget_summary'), SB.rpc('amicale_budget_month', { y: BM.y, m: BM.m }),
     SB.from('amicale_movements').select('*').gte('op_date', d0).lt('op_date', d1).order('op_date', { ascending: false }).order('id', { ascending: false })]);
   if (error) return `<div class="err">${esc(error.message)}</div>`;
   const g = sm || { opening: 0, entrees: 0, depenses: 0 }, k = mo || { report: 0, entrees: 0, depenses: 0 };
@@ -315,7 +326,7 @@ async function budgetV() {
 async function saveOpening(e) {
   e.preventDefault(); const v = parseInt(new FormData(e.target).get('op'), 10);
   const { data, error } = await SB.from('amicale_settings').update({ value: String(v) }).eq('key', 'opening_balance').select();
-  if (error || !data.length) { alert(error ? error.message : "Exécute d'abord le fichier 7-budget-par-mois.sql dans Supabase."); return; }
+  if (error || !data.length) { alert(error ? error.message : "Exécute d'abord le fichier installation-complete.sql dans Supabase."); return; }
   alert('Solde initial enregistré.'); fill();
 }
 const norm = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -334,41 +345,121 @@ async function delMov(id) {
 
 let SIT = {};
 async function situationV() {
-  const [amt, { data, error }] = await Promise.all([trancheAmt(), SB.rpc('members_overview', { y: YEAR })]);
+  const { data, error } = await SB.rpc('amicale_members_overview', { y: YEAR });
   if (error) return `<div class="err">${esc(error.message)}</div>`;
   SIT = {}; (data || []).forEach(p => SIT[p.member_id] = p.first_name + ' ' + p.last_name);
   const chip = (ok, t) => `<span class="tag" style="background:${ok ? '#15803d' : '#4b5563'}">${t}</span>`;
-  const rows = (data || []).map(p => `<div class="c" data-n="${esc(norm(p.first_name + ' ' + p.last_name))}"><div class="m"><b>${esc(p.first_name)} ${esc(p.last_name)}</b><span class="s">${(p.t1 ? 1 : 0) + (p.t2 ? 1 : 0)}/2 tranches</span></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${chip(p.t1, 'T1 ' + (p.t1 ? 'payée' : 'non payée'))}${chip(p.t2, 'T2 ' + (p.t2 ? 'payée' : 'non payée'))}${chip(p.fiancailles > 0, 'Fiançailles ' + p.fiancailles + '/1')}${chip(!!p.groupe, p.groupe ? EVL[p.groupe] + ' 1/1' : 'Mar./Circ./Comm. 0/1')}${chip(p.baptemes > 0, 'Baptêmes ' + p.baptemes + '/4')}${chip(p.deces > 0, 'Décès ' + p.deces)}</div>
-    ${isAdm() ? `${!p.t1 || !p.t2 ? `<div class="g2">${!p.t1 ? btnS('Valider Tranche 1', `pay('${p.member_id}',1)`, 'green') : ''}${!p.t2 ? btnS('Valider Tranche 2', `pay('${p.member_id}',2)`, 'green') : ''}</div>` : ''}<div style="margin-top:10px">${btnS('Gérer la situation', `openEvent('${p.member_id}')`, 'or')}</div>` : ''}</div>`).join('');
-  const cfg = isAdm() ? `<form class="c" onsubmit="saveAmt(event)"><label class="s">Montant d'une tranche (FCFA)<input class="f" name="amt" type="number" min="0" step="1" inputmode="numeric" value="${amt}" required></label>
-    <button class="b sm" style="width:100%;margin-top:12px">Enregistrer le montant</button></form>` : '';
-  return `<div style="font-weight:700;font-size:16px">Situation ${YEAR} · tranche : ${fcfa(amt)}</div><div class="s">Valider une tranche informe le membre de sa situation. La caisse n'est pas modifiée.</div>${cfg}${searchBox()}${rows || '<div class="c s">Aucun membre actif.</div>'}`;
+  const tg = data && data[0] ? data[0].target : 0;
+  const rows = (data || []).map(p => { const pct = p.target ? Math.min(100, Math.round(p.paid * 100 / p.target)) : 0;
+    return `<div class="c" data-n="${esc(norm(p.first_name + ' ' + p.last_name))}"><div class="m"><b>${esc(p.first_name)} ${esc(p.last_name)}</b><span class="s">${pct} %</span></div>
+    <div style="height:10px;border-radius:5px;background:#2a2f3d;margin-top:10px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${pct >= 100 ? '#22c55e' : '#f59e0b'}"></div></div>
+    <div class="s" style="margin-top:6px">Cotisation ${YEAR} : ${num(p.paid)} / ${num(p.target)} FCFA</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${chip(p.fiancailles > 0, 'Fiançailles ' + p.fiancailles + '/1')}${chip(!!p.groupe, p.groupe ? EVL[p.groupe] + ' 1/1' : 'Mar./Circ./Comm. 0/1')}${chip(p.baptemes > 0, 'Baptêmes ' + p.baptemes + '/4')}${chip(p.deces > 0, 'Décès ' + p.deces)}</div>
+    ${isAdm() ? `<div style="margin-top:12px">${btnS('Gérer la situation', `openEvent('${p.member_id}')`, 'or')}</div>` : ''}</div>`; }).join('');
+  return `<div style="font-weight:700;font-size:16px">Situation ${YEAR} · objectif : ${fcfa(tg)} par membre</div>${searchBox()}${rows || '<div class="c s">Aucun membre actif.</div>'}`;
 }
 
-async function pay(id, t) {
-  if (!confirm(`Valider la tranche ${t} de ${SIT[id]} ? La caisse ne sera pas modifiée.`)) return;
-  const { error } = await SB.from('amicale_tranches').insert({ member_id: id, year: YEAR, tranche: t });
-  if (error) alert(/duplicate|unique/i.test(error.message) ? 'Cette tranche est déjà validée.' : error.message + " (le fichier 6-tranches-hors-caisse.sql a-t-il été exécuté ?)");
-  fill();
+let SHOT = null;
+function copyTxt(t) { if (navigator.clipboard) navigator.clipboard.writeText(t).then(() => alert('Copié : ' + t), () => prompt('Copie ce texte :', t)); else prompt('Copie ce texte :', t); }
+function setAmt(v) { const i = document.querySelector('input[name=amt]'); if (i) i.value = v; }
+function pickShot(inp) {
+  const f = inp.files[0]; SHOT = null; $('#sp').innerHTML = ''; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { const im = new Image(); im.onload = () => {
+    const k = Math.min(1, 1000 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+    c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    c.toBlob(b => { SHOT = b; $('#sp').innerHTML = `<img src="${URL.createObjectURL(b)}" alt="Capture choisie" style="max-width:100%;max-height:260px;border-radius:12px;margin-top:10px">`; }, 'image/jpeg', .72);
+  }; im.src = r.result; };
+  r.readAsDataURL(f);
 }
-async function saveAmt(e) {
-  e.preventDefault(); const v = parseInt(new FormData(e.target).get('amt'), 10);
-  const { error } = await SB.from('amicale_settings').update({ value: String(v) }).eq('key', 'tranche_amount');
-  alert(error ? error.message : 'Montant enregistré.'); fill();
+async function payV() {
+  SHOT = null;
+  const [{ data: ov }, { data: st }] = await Promise.all([SB.rpc('amicale_members_overview', { y: YEAR }),
+    SB.from('amicale_settings').select('value').eq('key', 'wave_number').maybeSingle()]);
+  const o = (ov || []).find(x => x.member_id === me.id) || { paid: 0, target: 0 }, rest = Math.max(0, o.target - o.paid), wave = st && st.value;
+  if (!wave) return '<div class="c">Le numéro Wave de l\'amicale n\'est pas encore renseigné. Contacte un administrateur.</div>';
+  return `<div class="c" style="background:linear-gradient(135deg,#15803d,#166534)"><div style="font-size:13px;color:#d1fae5">Cotisation ${YEAR}</div><div style="font-size:24px;font-weight:800;margin-top:4px">${num(o.paid)} / ${num(o.target)} FCFA</div><div style="font-size:13px;color:#d1fae5;margin-top:4px">${rest ? 'Reste ' + fcfa(rest) : 'Objectif atteint, merci !'} · versement minimum ${fcfa(MIN)}</div></div>
+  <div class="c"><div class="s">1. Envoie l'argent par Wave à ce numéro</div><div style="font-size:26px;font-weight:800;margin-top:6px;letter-spacing:.5px">${esc(wave)}</div>
+  <div style="margin-top:10px">${btnS('Copier le numéro', `copyTxt('${esc(wave)}')`, 'blue')}</div></div>
+  <form class="c" onsubmit="submitPay(event)"><div class="s">2. Indique la somme envoyée</div>
+  <input class="f" name="amt" type="number" min="${MIN}" step="500" inputmode="numeric" placeholder="Montant (minimum ${num(MIN)} FCFA)" value="${MIN}" required>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button type="button" class="b sm" style="--c:#4b5563;--d:#1f2937" onclick="setAmt(5000)">5 000</button><button type="button" class="b sm" style="--c:#4b5563;--d:#1f2937" onclick="setAmt(10000)">10 000</button>${rest >= MIN ? `<button type="button" class="b sm" style="--c:#4b5563;--d:#1f2937" onclick="setAmt(${rest})">Tout le reste</button>` : ''}</div>
+  <div class="s" style="margin-top:16px">3. Ajoute la capture d'écran de la transaction Wave</div>
+  <label class="b sm" style="margin-top:8px;cursor:pointer;--c:#2563eb;--d:#1e3a8a">Choisir la capture<input type="file" accept="image/*" hidden onchange="pickShot(this)"></label><div id="sp"></div>
+  <label class="s" style="display:block;margin-top:14px">Référence de la transaction (facultatif)<input class="f" name="ref" maxlength="60"></label>
+  <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">J'ai payé</button></form>
+  <div class="s" style="text-align:center">Un administrateur vérifie ton paiement, puis ton total est mis à jour.</div>`;
 }
-
+async function submitPay(e) {
+  e.preventDefault(); const f = new FormData(e.target), amt = parseInt(f.get('amt'), 10);
+  if (!(amt >= MIN)) { alert('Le montant minimum est de ' + fcfa(MIN) + '.'); return; }
+  if (!SHOT) { alert("Ajoute la capture d'écran de ta transaction Wave."); return; }
+  const path = `${me.id}/${Date.now()}.jpg`;
+  const up = await SB.storage.from('amicale-proofs').upload(path, SHOT, { contentType: 'image/jpeg' });
+  if (up.error) { alert("Envoi de la capture impossible : " + up.error.message + ' (le fichier installation-complete.sql a-t-il été exécuté ?)'); return; }
+  const { error } = await SB.from('amicale_payments').insert({ member_id: me.id, year: YEAR, amount: amt, reference: (f.get('ref') || '').trim() || null, screenshot_path: path, status: 'pending', source: 'declared' });
+  if (error) { alert(error.message); return; }
+  alert('Paiement déclaré. Un administrateur va le vérifier.'); SHOT = null; go('profile');
+}
+async function paymentsV() {
+  const { data, error } = await SB.from('amicale_payments').select('*').eq('status', 'pending').order('created_at', { ascending: true });
+  if (error) return `<div class="err">${esc(error.message)}</div>`;
+  if (!data.length) return '<div class="c s">Aucun paiement à vérifier.</div>';
+  const { data: ps } = await SB.from('amicale_profiles').select('id,first_name,last_name').in('id', [...new Set(data.map(x => x.member_id))]);
+  const nm = {}; (ps || []).forEach(p => nm[p.id] = p.first_name + ' ' + p.last_name);
+  return `<div style="font-weight:700;font-size:16px">${data.length} paiement(s) à vérifier</div><div class="s">Compare avec les transactions reçues dans le compte Wave de l'amicale avant de valider.</div>` + data.map(x => `<div class="c">
+    <div class="m"><b>${esc(nm[x.member_id] || 'Membre')}</b><b style="color:#4ade80">${fcfa(x.amount)}</b></div>
+    <div class="s" style="margin-top:2px">${dfr(x.created_at.slice(0, 10))}${x.reference ? ' · réf. ' + esc(x.reference) : ''}</div>
+    ${x.screenshot_path ? `<a data-pa="1" target="_blank" rel="noopener"><img data-p="${esc(x.screenshot_path)}" alt="Capture du paiement" style="width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin-top:12px;background:#0f131b"></a>` : '<div class="s" style="margin-top:10px">Aucune capture.</div>'}
+    <div class="g2">${btn('Valider', `decidePay(${x.id},true)`, 'green')}${btn('Refuser', `decidePay(${x.id},false)`, 'red')}</div></div>`).join('');
+}
+async function loadShots() {
+  for (const img of document.querySelectorAll('img[data-p]')) {
+    const { data } = await SB.storage.from('amicale-proofs').createSignedUrl(img.dataset.p, 600);
+    if (data) { img.src = data.signedUrl; if (img.parentElement.dataset.pa) img.parentElement.href = data.signedUrl; }
+  }
+}
+async function decidePay(id, ok) {
+  let note = null;
+  if (!ok) { note = prompt('Motif du refus (facultatif)', ''); if (note === null) return; }
+  const { data, error } = await SB.from('amicale_payments').update({ status: ok ? 'validated' : 'rejected', note: note || null, decided_by: me.id, decided_at: new Date().toISOString() }).eq('id', id).select();
+  if (error || !data.length) alert(error ? error.message : 'Action impossible.');
+  refreshPending(); fill();
+}
 
 let NEWLOGO = null;
 async function settingsV() {
   NEWLOGO = null;
+  const [{ data: st }, { data: tg }] = await Promise.all([SB.from('amicale_settings').select('key,value').in('key', ['wave_number', 'annual_target_default']), SB.rpc('amicale_target_for', { y: YEAR })]);
+  const g = k => ((st || []).find(r => r.key === k) || {}).value || '';
   return `<form class="c" onsubmit="saveBrand(event)"><div style="font-weight:700;font-size:16px">Nom et logo de l'amicale</div>
   <div style="display:flex;align-items:center;gap:14px;margin-top:14px"><div id="lp" class="lo" style="width:76px;height:76px;font-size:12px">${logo()}</div>
   <label class="b sm" style="flex:1;cursor:pointer;--c:#2563eb;--d:#1e3a8a">Choisir un logo<input type="file" accept="image/*" hidden onchange="pickLogo(this)"></label></div>
   <label class="s" style="display:block;margin-top:14px">Nom de l'amicale<input class="f" name="name" value="${esc(BR.name)}" required maxlength="80"></label>
   <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">Enregistrer</button></form>
+  <form class="c" onsubmit="saveWave(event)"><div style="font-weight:700;font-size:16px">Numéro Wave de l'amicale</div>
+  <label class="s" style="display:block;margin-top:10px">Les membres paient sur ce numéro<input class="f" name="w" type="tel" value="${esc(g('wave_number'))}" placeholder="ex. 77 000 00 00"></label>
+  <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">Enregistrer le numéro</button></form>
+  <form class="c" onsubmit="saveTarget(event)"><div style="font-weight:700;font-size:16px">Objectif de cotisation ${YEAR}</div>
+  <label class="s" style="display:block;margin-top:10px">Par membre, en FCFA<input class="f" name="t" type="number" min="${MIN}" step="500" inputmode="numeric" value="${tg || ''}" required></label>
+  <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">Enregistrer l'objectif</button>
+  <div class="s" style="margin-top:10px">Versement minimum : ${fcfa(MIN)}. Objectif par défaut des autres années : ${fcfa(g('annual_target_default') || 50000)}.</div></form>
   <div class="s" style="text-align:center">Le nom et le logo s'affichent en haut de toutes les pages et sur l'écran de connexion.</div>`;
 }
+async function saveWave(e) {
+  e.preventDefault(); const v = new FormData(e.target).get('w').trim();
+  const { data, error } = await SB.from('amicale_settings').update({ value: v }).eq('key', 'wave_number').select();
+  if (error || !data.length) { alert(error ? error.message : "Exécute d'abord le fichier installation-complete.sql dans Supabase."); return; }
+  alert('Numéro enregistré.');
+}
+async function saveTarget(e) {
+  e.preventDefault(); const v = parseInt(new FormData(e.target).get('t'), 10);
+  if (!(v >= MIN)) { alert("L'objectif doit être d'au moins " + fcfa(MIN) + '.'); return; }
+  const { error } = await SB.from('amicale_targets').upsert({ year: YEAR, amount: v });
+  alert(error ? error.message : 'Objectif enregistré.');
+}
+
 function pickLogo(inp) {
   const f = inp.files[0]; if (!f) return;
   const r = new FileReader();
@@ -385,7 +476,7 @@ async function saveBrand(e) {
   const rows = [['amicale_name', name]]; if (NEWLOGO !== null) rows.push(['amicale_logo', NEWLOGO]);
   for (const [k, v] of rows) {
     const { data, error } = await SB.from('amicale_settings').update({ value: v }).eq('key', k).select();
-    if (error || !data.length) { alert(error ? error.message : "Exécute d'abord le fichier 3-nom-et-logo.sql dans Supabase."); return; }
+    if (error || !data.length) { alert(error ? error.message : "Exécute d'abord le fichier installation-complete.sql dans Supabase."); return; }
   }
   NEWLOGO = null; await loadBrand(); alert('Enregistré.'); render();
 }
@@ -396,18 +487,22 @@ function openEvent(id) { EVM = id; go('event'); }
 function relToggle() { const k = document.querySelector('input[name=k]:checked'); $('#rel').style.display = k && k.value === 'deces' ? 'block' : 'none'; }
 async function eventV() {
   if (!EVM) return '<div class="c s">Choisis un membre dans « Situation des membres ».</div>';
-  const [{ data, error }, { data: pays }, { data: evs }, amt] = await Promise.all([SB.rpc('members_overview', { y: YEAR }),
-    SB.from('amicale_tranches').select('id,tranche,validated_at').eq('member_id', EVM).eq('year', YEAR),
-    SB.from('amicale_events').select('*').eq('member_id', EVM).order('event_date', { ascending: false }), trancheAmt()]);
+  const [{ data, error }, { data: pays }, { data: evs }] = await Promise.all([SB.rpc('amicale_members_overview', { y: YEAR }),
+    SB.from('amicale_payments').select('*').eq('member_id', EVM).eq('year', YEAR).order('created_at', { ascending: false }),
+    SB.from('amicale_events').select('*').eq('member_id', EVM).order('event_date', { ascending: false })]);
   const p = (data || []).find(x => x.member_id === EVM);
   if (error || !p) return `<div class="err">${esc(error ? error.message : 'Membre introuvable.')}</div>`;
   SIT[EVM] = p.first_name + ' ' + p.last_name;
-  const tr = t => { const x = (pays || []).find(y => y.tranche === t); return `<div class="row"><div>Tranche ${t} · ${num(amt)}<div class="s">${x ? 'Validée le ' + dfr(x.validated_at) : 'Non validée'}</div></div>${x ? btnS('Annuler', `cancelPay(${x.id})`, 'red') : btnS('Valider Tranche ' + t, `pay('${EVM}',${t})`, 'green')}</div>`; };
+  const stT = { validated: ['Validé', '#15803d'], pending: ['En attente', '#c2410c'], rejected: ['Refusé', '#b91c1c'] };
+  const prow = (pays || []).map(x => `<div class="row"><div>${fcfa(x.amount)}<div class="s">${dfr(x.created_at.slice(0, 10))} · <span style="color:${stT[x.status][1]}">${stT[x.status][0]}</span></div></div>${btnS('Supprimer', `delPay(${x.id})`, 'red')}</div>`).join('');
   const evl = (evs || []).map(e => `<div class="row"><div>${EVL[e.kind]}${e.relative ? ' · ' + REL[e.relative] : ''}<div class="s">${dfr(e.event_date)}</div></div>${btnS('Supprimer', `delEvent(${e.id})`, 'red')}</div>`).join('');
   const opt = (v, l, off, note) => `<label class="opt ${off ? 'off' : ''}"><input type="radio" name="k" value="${v}" ${off ? 'disabled' : ''} required onchange="relToggle()"><span>${l}</span><em>${note}</em></label>`;
   const gOff = !!p.groupe, gN = gOff ? '1/1 · limite atteinte' : '0/1';
-  return `<div class="c" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)"><div style="font-weight:800;font-size:18px">${esc(p.first_name)} ${esc(p.last_name)}</div><div style="font-size:13px;color:#dbe6ff;margin-top:4px">Valider, annuler ou corriger une information</div></div>
-  <div class="c" style="padding-top:8px;padding-bottom:8px"><div style="font-weight:700;padding:6px 0">Cotisations ${YEAR}</div>${tr(1)}${tr(2)}</div>
+  return `<div class="c" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)"><div style="font-weight:800;font-size:18px">${esc(p.first_name)} ${esc(p.last_name)}</div><div style="font-size:13px;color:#dbe6ff;margin-top:4px">Cotisation ${YEAR} : ${num(p.paid)} / ${num(p.target)} FCFA</div></div>
+  <div class="c" style="padding-top:8px;padding-bottom:8px"><div style="font-weight:700;padding:6px 0">Versements ${YEAR}</div>${prow || '<div class="s" style="padding:8px 0">Aucun versement.</div>'}</div>
+  <form class="c" onsubmit="addPay(event)"><div style="font-weight:700">Ajouter un versement (main propre ou autre)</div>
+  <input class="f" name="amt" type="number" min="${MIN}" step="500" inputmode="numeric" placeholder="Montant (minimum ${num(MIN)} FCFA)" required>
+  <button class="b" style="width:100%;margin-top:14px;--c:#15803d;--d:#14532d">Valider le versement</button></form>
   ${evl ? `<div class="c" style="padding-top:8px;padding-bottom:8px"><div style="font-weight:700;padding:6px 0">Événements enregistrés</div>${evl}</div>` : ''}
   <form class="c" onsubmit="addEvent(event)" style="padding-top:8px"><div style="font-weight:700;padding:8px 0">Ajouter un événement</div>
   ${opt('fiancailles', 'Fiançailles', p.fiancailles >= 1, p.fiancailles >= 1 ? '1/1 · limite atteinte' : '0/1')}
@@ -418,12 +513,18 @@ async function eventV() {
   <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">Enregistrer l'événement</button></form>
   <div class="s" style="text-align:center">Mariage, circoncision et communion : un seul des trois par membre.</div>`;
 }
-async function cancelPay(id) {
-  if (!confirm('Annuler la validation de cette tranche ?')) return;
-  const { data, error } = await SB.from('amicale_tranches').delete().eq('id', id).select();
-  if (error || !data.length) alert(error ? error.message : "Annulation impossible : exécute d'abord le fichier 6-tranches-hors-caisse.sql dans Supabase.");
-  fill();
+async function addPay(e) {
+  e.preventDefault(); const amt = parseInt(new FormData(e.target).get('amt'), 10);
+  if (!(amt >= MIN)) { alert('Le montant minimum est de ' + fcfa(MIN) + '.'); return; }
+  const { error } = await SB.from('amicale_payments').insert({ member_id: EVM, year: YEAR, amount: amt, status: 'validated', source: 'admin', decided_by: me.id, decided_at: new Date().toISOString() });
+  if (error) alert(error.message + ' (le fichier installation-complete.sql a-t-il été exécuté ?)'); fill();
 }
+async function delPay(id) {
+  if (!confirm('Supprimer ce versement ? Le total du membre sera recalculé.')) return;
+  const { data, error } = await SB.from('amicale_payments').delete().eq('id', id).select();
+  if (error || !data.length) alert(error ? error.message : 'Suppression impossible.'); fill();
+}
+
 async function addEvent(e) {
   e.preventDefault(); const f = new FormData(e.target), k = f.get('k');
   const row = { member_id: EVM, kind: k, event_date: f.get('date') }; if (k === 'deces') row.relative = f.get('rel');
@@ -482,7 +583,7 @@ async function addPost(e, k) {
   if (NEWPDF) {
     const path = `${k}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.pdf`;
     const up = await SB.storage.from('amicale-docs').upload(path, NEWPDF, { contentType: 'application/pdf' });
-    if (up.error) { alert("Envoi du PDF impossible : " + up.error.message + " (le fichier 5-ajustements.sql a-t-il été exécuté ?)"); return; }
+    if (up.error) { alert("Envoi du PDF impossible : " + up.error.message + " (le fichier installation-complete.sql a-t-il été exécuté ?)"); return; }
     file_url = SB.storage.from('amicale-docs').getPublicUrl(path).data.publicUrl;
   }
   const { error } = await SB.from('amicale_posts').insert({ kind: k, title: (f.get('title') || '').trim(), body: (f.get('body') || '').trim(), extra: (f.get('extra') || '').trim() || null, photo: NEWPH || null, file_url });
@@ -499,31 +600,34 @@ async function delPost(id) {
 }
 
 
-let MB = {}, PENDING = 0;
+let MB = {}, PENDING = 0, PENDPAY = 0;
 async function renameMember(id) {
   const p = MB[id]; if (!p) return;
   const fn = prompt('Prénom', p.first_name); if (fn === null) return;
   const ln = prompt('Nom (tu peux ajouter un numéro, ex. : Sarr N°1)', p.last_name); if (ln === null) return;
   if (!fn.trim() || !ln.trim()) { alert('Le prénom et le nom ne peuvent pas être vides.'); return; }
-  const { data, error } = await SB.from('profiles').update({ first_name: fn.trim(), last_name: ln.trim() }).eq('id', id).select();
+  const { data, error } = await SB.from('amicale_profiles').update({ first_name: fn.trim(), last_name: ln.trim() }).eq('id', id).select();
   if (error || !data.length) alert(error ? error.message : 'Modification impossible.'); fill();
 }
 async function purge(id) {
   const p = MB[id], nm = p ? p.first_name + ' ' + p.last_name : 'ce compte';
   if (!confirm(`Supprimer définitivement ${nm} ?\nSon compte et tout son historique (tranches, événements) disparaîtront. Cette action est irréversible.`)) return;
-  const { error } = await SB.rpc('purge_account', { uid: id });
-  if (error) alert(error.message + ' (le fichier 8-suppression-definitive.sql a-t-il été exécuté ?)'); fill();
+  const { error } = await SB.rpc('amicale_purge_account', { uid: id });
+  if (error) alert(error.message + ' (le fichier installation-complete.sql a-t-il été exécuté ?)'); fill();
 }
 function setBadges() {
-  const b = $('#bd-req'), d = $('#bd-dot');
+  const b = $('#bd-req'), p = $('#bd-pay'), d = $('#bd-dot');
   if (b) { b.textContent = PENDING; b.style.display = PENDING ? 'flex' : 'none'; }
-  if (d) d.style.display = PENDING ? 'block' : 'none';
+  if (p) { p.textContent = PENDPAY; p.style.display = PENDPAY ? 'flex' : 'none'; }
+  if (d) d.style.display = PENDING || PENDPAY ? 'block' : 'none';
 }
 async function refreshPending() {
   if (!me || me.status !== 'active' || !isAdm()) return;
-  const { count } = await SB.from('profiles').select('id', { count: 'exact', head: true }).eq('status', 'pending');
-  PENDING = count || 0; setBadges();
+  const [{ count: a }, { count: b }] = await Promise.all([SB.from('amicale_profiles').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+    SB.from('amicale_payments').select('id', { count: 'exact', head: true }).eq('status', 'pending')]);
+  PENDING = a || 0; PENDPAY = b || 0; setBadges();
 }
+
 setInterval(refreshPending, 60000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshPending(); });
 
