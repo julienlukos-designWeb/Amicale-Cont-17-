@@ -194,6 +194,6 @@ return head("Membres","","Comptes et accès à la plateforme")+(p.length?`<div c
 `<div class="card">${S.users.map((u,i)=>`<div class="ro" style="align-items:flex-start"><div class="av">${ini(u.n)}</div><div class="m"><b>${esc(u.n)}</b><span>${esc(u.p)} · ${rl(u.r)}</span>${act(u,i)}</div><span class="tg ${u.pend?"w":u.on?"":"x"}">${stt(u)}</span></div>`).join("")}</div>`},
 par(){if(!adm())return"";return head("Paramètres","","Personnalisez la plateforme")+`<div class="card"><b>Logo</b><div class="rw" style="justify-content:flex-start;margin:12px 0;flex-wrap:nowrap">${lg(64)}<input type="file" accept="image/*" onchange="setLogo(this)" style="margin:0"></div>${S.logo?`<button class="lnk" onclick="rmLogo()">Retirer le logo</button>`:""}</div><div class="card"><div class="k" style="margin-bottom:6px">Nom de la plateforme</div><input id="nm" value="${esc(S.name)}"><div class="k" style="margin-bottom:6px">Slogan</div><input id="tg" value="${esc(S.tag)}"><button class="bt t1" onclick="saveSet()">Enregistrer</button></div>`}};
 boot();
-</script><script src="cotisations.js"></script>
+</script><script src="cotisations.js"></script><script src="paiement-wave.js"></script>
 </body>
 </html>
