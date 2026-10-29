@@ -191,8 +191,7 @@ V.cot=function(){
     return h.replace('<div class="hero">',`<div class="card" style="border-color:#f59e0b"><b>Paiement par Wave non activé</b><p class="sub" style="margin:6px 0 0">Exécutez le fichier <b>paiement-cotisations.sql</b> dans Supabase (SQL Editor) pour l’activer.</p></div><div class="hero">`);
   }
   const mine=S.pays.filter(p=>p.uid==U.id),pend=a?S.pays.filter(p=>p.st=="pending"):[];
-  let top=`<div class="card"><div class="k">Numéro Wave de l’amicale</div><div style="font-size:24px;font-weight:800;margin:4px 0 14px">${S.wave?esc(S.wave):'<span class="mut">Pas encore défini</span>'}</div>
-<button class="b3" style="--a:#22d3ee;--b:#0891b2;--d:#155e75;margin-bottom:0" onclick="payOpen()">${ic("wallet",18)}Payer ma cotisation</button></div>`;
+  let top=`<div class="card"><div class="k">Numéro Wave de l’amicale</div><div style="font-size:24px;font-weight:800;margin:4px 0 14px">${S.wave?esc(S.wave):'<span class="mut">Pas encore défini</span>'}</div></div>`;
   if(mine.length)top+=`<div class="card"><b>Mes paiements Wave</b>${mine.map(p=>prow(p,0)).join("")}</div>`;
   if(a){
     top+=`<div class="card"><div class="k" style="margin-bottom:6px">Numéro Wave (administrateur)</div><input id="pw" type="tel" value="${esc(S.wave)}" placeholder="Ex. 77 123 45 67"><button class="bt t1" onclick="paySaveWave()">Enregistrer</button></div>`;
@@ -209,7 +208,7 @@ const _dw=V.dash;
 V.dash=function(){
   const h=_dw.call(V);if(!S.payOk)return h;
   const n=adm()?S.pays.filter(p=>p.st=="pending").length:0;
-  const btn=`<div class="acts"><button class="b3" style="--a:#22d3ee;--b:#0891b2;--d:#155e75" onclick="payOpen()">${ic("wallet",18)}Payer ma cotisation</button></div>`;
+  const btn="";
   const card=n?`<div class="card last" onclick="go('cot')" style="border-color:#f59e0b"><span class="ti" style="--a:#22d3ee;--b:#0891b2;--d:#155e75">${ic("wallet",22)}</span><div><small>Paiements Wave</small><b>${n} à vérifier</b></div><span class="mut">Voir</span></div>`:"";
   return h.replace(/<div class="hi">[^]*?<\/div>/,m=>m+btn+card);
 };
