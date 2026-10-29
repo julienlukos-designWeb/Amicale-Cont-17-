@@ -1,199 +1,634 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Amicale</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<meta name="theme-color" content="#1d1d21">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Contingents 17">
+<title>Amicale Contingents 17</title>
 <style>
-:root{--bg:#f4f1fb;--card:#fff;--ink:#1a1633;--mut:#6d6888;--line:#e7e2f5;--soft:#efeafb;--pr:#7c3aed;--ok:#059669;--ko:#e11d48;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f0d1a;--card:#1b1830;--ink:#f1eefb;--mut:#a39fbf;--line:#2d2948;--soft:#262244;--pr:#a78bfa;--ok:#34d399;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f0d1a;--card:#1b1830;--ink:#f1eefb;--mut:#a39fbf;--line:#2d2948;--soft:#262244;--pr:#a78bfa;--ok:#34d399;color-scheme:dark}
-*{box-sizing:border-box}html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:500 15px/1.45 "Plus Jakarta Sans","Segoe UI",system-ui,sans-serif}
-button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0;text-align:inherit}svg{flex-shrink:0}
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;gap:12px;padding:12px 16px;background:#1b1537;color:#fff}
-.top b{font-size:17px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mb{width:42px;height:42px;border-radius:13px;background:#2b2450;display:grid;place-items:center;color:#fff;flex-shrink:0}
-.lgo{border-radius:12px;object-fit:cover;background:linear-gradient(135deg,#7c3aed,#fb923c);display:grid;place-items:center;color:#fff;font-weight:800;flex-shrink:0;border:2px solid #fff}
-main{padding:20px 16px 40px;max-width:900px;margin:0 auto;animation:up .4s ease both}
-@keyframes up{from{opacity:0;transform:translateY(10px)}}
-.date{color:var(--mut);font-size:15px;text-transform:capitalize}.hi{font-size:26px;font-weight:800;margin:2px 0 16px}h1{font-size:23px;font-weight:800;margin:0 0 4px}
-.sub{color:var(--mut);margin:0 0 14px}.mut{color:var(--mut);font-weight:600}
-.acts{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
-.b3{display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:800;font-size:16px;padding:12px 22px;border-radius:999px;background:linear-gradient(var(--a),var(--b));box-shadow:0 5px 0 var(--d),0 12px 20px -6px var(--b),inset 0 2px 0 rgba(255,255,255,.4);transition:transform .1s,box-shadow .1s;margin-bottom:5px}
-.b3:active{transform:translateY(3px);box-shadow:0 2px 0 var(--d)}
-.bt{display:inline-flex;align-items:center;gap:7px;color:#fff;font-weight:700;font-size:14px;padding:9px 15px;border-radius:13px;background:linear-gradient(var(--a),var(--b));box-shadow:0 3px 0 var(--d),inset 0 1px 0 rgba(255,255,255,.4);transition:transform .1s}
-.bt:active{transform:translateY(2px);box-shadow:0 1px 0 var(--d)}.bt.s{padding:8px 13px;font-size:13px}
-.t1{--a:#2dd4bf;--b:#059669;--d:#065f46}.t2{--a:#fb923c;--b:#e11d48;--d:#9f1239}.t3{--a:#fcd34d;--b:#f59e0b;--d:#b45309;color:#3b1d00}.t4{--a:#60a5fa;--b:#2563eb;--d:#1e3a8a}
-.card{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:18px;margin-bottom:16px;box-shadow:0 10px 30px -14px rgba(76,29,149,.25)}
-.rw{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.last{display:flex;align-items:center;gap:14px;cursor:pointer;border-radius:999px;padding:12px 22px 12px 12px}.last small{color:var(--pr);font-weight:700;display:block}.last b{font-size:17px}.last div{flex:1;min-width:0}
-.ti{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 4px 0 var(--d),inset 0 2px 0 rgba(255,255,255,.4);flex-shrink:0}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
-.st{border-radius:28px;padding:18px;color:#fff;background:linear-gradient(150deg,var(--a),var(--b));box-shadow:0 8px 0 var(--d),0 16px 26px -10px var(--b);min-height:150px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-.st:before{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(255,255,255,.25),transparent 45%)}.st>*{position:relative}
-.top2{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:15px}.sic{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.25);display:grid;place-items:center;flex-shrink:0}.st .n{font-size:22px;font-weight:800;line-height:1.15}
-.ct{font-size:19px}.vb{background:var(--soft);padding:10px 16px;border-radius:14px;font-weight:700;box-shadow:0 3px 0 var(--line);white-space:nowrap}
-.bars{display:flex;gap:6px;align-items:flex-end;margin-top:18px;min-height:170px}.bc{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px}.bc b{display:block;width:100%;max-width:42px;background:linear-gradient(#a78bfa,#6d28d9);border-radius:10px 10px 4px 4px}.bv{font-size:12px;font-weight:800}.bm{font-size:12px;color:var(--mut);font-weight:600}
-.hero{border-radius:28px;padding:20px;color:#fff;margin-bottom:18px;background:linear-gradient(150deg,#8b5cf6,#5b21b6);box-shadow:0 8px 0 #3b0f8c,0 16px 26px -10px #5b21b6}.hero small{opacity:.8;font-weight:600}.bal{font-size:28px;font-weight:800;margin:4px 0 14px}.bts{display:flex;gap:10px;flex-wrap:wrap}
-.k{color:var(--mut);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}.ok{color:var(--ok);font-weight:800}.ko{color:var(--ko);font-weight:800}
-.ic{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:var(--soft);color:var(--pr);flex-shrink:0}.ic.in{background:#d1fae5;color:#059669}.ic.out{background:#ffe4e6;color:#e11d48}
-.ro{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.ro:last-child{border:0}.ro .m{flex:1;min-width:0}.ro .m b{display:block}.ro .m span{color:var(--mut);font-size:13px}
-.lnk{color:var(--pr);font-weight:700;font-size:14px}.ib{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;color:var(--mut)}.ib:hover{background:var(--soft);color:var(--ko)}
-.seg{display:flex;background:var(--soft);border-radius:999px;padding:6px;gap:4px;margin-bottom:16px}.seg button{flex:1;padding:11px 6px;border-radius:999px;font-weight:700;font-size:14px;color:var(--mut);text-align:center}.seg .on{background:var(--card);color:var(--pr);box-shadow:0 2px 8px rgba(0,0,0,.12)}.seg span{opacity:.6;margin-left:4px}
-.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}.rc{background:var(--card);border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:0 10px 30px -14px rgba(76,29,149,.25)}
-.ph{position:relative;height:130px;background:var(--soft);display:grid;place-items:center;color:var(--mut);overflow:hidden}.ph img{width:100%;height:100%;object-fit:cover;pointer-events:none;-webkit-touch-callout:none;user-select:none}
-.bd{position:absolute;left:10px;top:10px;background:#10b981;color:#fff;font-weight:800;font-size:12px;padding:4px 12px;border-radius:99px}.bd.dp{background:#e11d48}
-.rb{padding:14px}.cl{color:var(--mut);font-size:13px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 0}
-.tg{padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;background:#d1fae5;color:#065f46}.tg.w{background:#fef3c7;color:#92400e}.tg.x{background:#ffe4e6;color:#9f1239}
-.av{width:42px;height:42px;border-radius:14px;background:linear-gradient(#fb923c,#ef4444);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;flex-shrink:0}
-input,textarea,select{font:inherit;width:100%;padding:13px 16px;border:2px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);margin-bottom:10px}input:focus,textarea:focus,select:focus{outline:0;border-color:var(--pr)}
-dialog{border:0;border-radius:28px;padding:22px;width:min(94vw,460px);max-height:90vh;overflow:auto;background:var(--card);color:var(--ink)}dialog::backdrop{background:rgba(8,6,20,.6);backdrop-filter:blur(3px)}
-#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20}#ov.show{display:block}
-#dw{position:fixed;top:0;bottom:0;left:0;width:min(78vw,300px);background:linear-gradient(180deg,#1d1640,#140f2e);color:#fff;z-index:21;padding:calc(22px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px));overflow-y:auto;transform:translateX(-100%);display:flex;flex-direction:column}
-#dw.open{transform:none;animation:sl .25s ease}@keyframes sl{from{transform:translateX(-100%)}}
-#dw .hd{display:flex;gap:12px;align-items:center;margin-bottom:14px}#dw .hd b{display:block;font-size:16px;line-height:1.2}#dw small{color:#b3add4}
-.cap{color:#8d86b5;font-weight:700;letter-spacing:.08em;font-size:11px;margin:12px 8px 6px}
-.mi{display:flex;align-items:center;gap:12px;width:100%;padding:5px 8px;border-radius:16px;font-weight:700;font-size:14.5px;color:#d9d5f0;margin-bottom:3px}.mi .ti{width:34px;height:34px;border-radius:11px;box-shadow:0 3px 0 var(--d),inset 0 1px 0 rgba(255,255,255,.4)}
-.mi.on{background:linear-gradient(#8b5cf6,#6d28d9);color:#fff;box-shadow:0 3px 0 #4c1d95}
-.bg{margin-left:auto;background:#e11d48;color:#fff;border-radius:99px;font-size:11px;padding:2px 8px;font-style:normal}
-.me{margin-top:auto;border:1px solid #3a3360;border-radius:22px;padding:12px;background:#231d45}.me .rw0{display:flex;gap:12px;align-items:center;margin-bottom:12px}.me b{display:block}
-.out{display:flex;gap:8px;align-items:center;justify-content:center;width:100%;padding:10px;font-size:14px;border-radius:15px;border:2px solid #f59e0b;background:#3a3360;font-weight:700;text-align:center}
-.ft{border-top:1px solid var(--line);margin-top:26px;padding:18px 0 6px;text-align:center;color:var(--mut);font-size:14px}.ft b{color:var(--ink)}.lc .ft{margin-top:16px;padding-top:14px;color:#6d6888}.lc .ft b{color:#1a1633}
-.lgn{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 15% 10%,rgba(124,58,237,.65),transparent 50%),radial-gradient(circle at 90% 30%,rgba(190,24,93,.5),transparent 50%),radial-gradient(circle at 60% 100%,rgba(16,185,129,.4),transparent 55%),#160f2e}
-.lc{background:#fff;color:#1a1633;border-radius:32px;padding:24px;width:100%;max-width:420px}.lc .sub{color:#6d6888}.lc input{background:#fff;color:#1a1633;border-radius:999px;border-color:#d9d3ee;padding:15px 20px}.lc .seg{background:#efecf8}.lc .seg button{color:#5d5879}.lc .seg .on{background:#fff;color:#7c3aed}.err{color:#e11d48;font-weight:600;margin:0 0 10px}
-@media(min-width:1000px){#dw{transform:none;width:300px}.mb{display:none}#ov{display:none!important}.top,main{margin-left:300px}main{max-width:960px;margin-right:auto;padding:28px 36px}.stats{grid-template-columns:repeat(4,1fr)}}
+:root{--bg:#0b0d12;--tx:#f3f5fa;--mu:#9aa3b5;--bd:rgba(255,255,255,.08);--ln:rgba(255,255,255,.08)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;color:var(--tx);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%;min-height:100vh;background:radial-gradient(800px 480px at 0% -8%,rgba(37,99,235,.28),transparent 60%),radial-gradient(700px 420px at 100% 0%,rgba(21,128,61,.22),transparent 60%),var(--bg);background-attachment:fixed}
+button,input,select{font-family:inherit}
+.top{position:sticky;top:0;z-index:5;height:64px;display:flex;align-items:center;gap:10px;padding:0 10px;background:rgba(14,17,24,.72);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--bd)}
+.ic{width:44px;height:44px;border:0;background:rgba(255,255,255,.07);border-radius:14px;color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.lg{display:flex;align-items:center;gap:10px;min-width:0}
+.lg>div{min-width:0}.lg b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lg span{display:block;font-size:11px;color:var(--mu)}
+.ic{position:relative}
+.bdg{margin-left:auto;background:#ef4444;color:#fff;border-radius:999px;min-width:22px;height:22px;padding:0 7px;font-size:12px;font-weight:700;display:none;align-items:center;justify-content:center}
+.dot{position:absolute;top:7px;right:7px;width:12px;height:12px;border-radius:50%;background:#ef4444;border:2px solid #14171f;display:none}
+.lo{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#facc15,#c2410c);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#1c1917;font-style:normal;flex:none;overflow:hidden;box-shadow:0 0 0 2px rgba(255,255,255,.18)}
+.lo img,.big img{width:100%;height:100%;object-fit:cover}
+.pg{max-width:560px;margin:0 auto;padding:18px 16px 8px;display:flex;flex-direction:column;gap:14px}
+.pg>*{animation:up .4s ease both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.c{border-radius:20px;padding:16px 18px;background:linear-gradient(160deg,#1b2130,#141822);border:1px solid var(--bd);box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.s{font-size:12px;color:var(--mu)}
+.m{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tag{border-radius:999px;padding:5px 11px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.b{--c:#2563eb;--d:#1e3a8a;display:flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:15px;color:#fff;font-weight:700;font-size:15px;letter-spacing:.2px;min-height:54px;padding:0 16px;margin-bottom:6px;text-shadow:0 1px 0 rgba(0,0,0,.28);
+ background:linear-gradient(180deg,rgba(255,255,255,.26),rgba(255,255,255,0) 55%),var(--c);
+ box-shadow:0 6px 0 var(--d),0 14px 20px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.4);transition:transform .08s,box-shadow .08s}
+.b:active{transform:translateY(5px);box-shadow:0 1px 0 var(--d),0 4px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25)}
+.sm{min-height:42px!important;font-size:13px!important;padding:0 12px!important}
+.wide{grid-column:1/-1}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+.q{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.st{padding:13px 14px}.st b{display:block;font-size:17px;margin-top:6px}
+.f{width:100%;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:#0f131b;color:var(--tx);font-size:15px;padding:12px 14px;min-height:48px;margin-top:6px}
+.f:focus{outline:2px solid #3b82f6;outline-offset:1px}
+select.f{appearance:auto}
+.tabs{display:flex;gap:6px;background:rgba(255,255,255,.06);border-radius:14px;padding:5px}
+.tabs button{flex:1;min-height:44px;border:0;border-radius:10px;font-weight:700;font-size:13px;background:none;color:var(--mu)}
+.tabs button.on{background:#2563eb;color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.45)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--bd);font-size:14px}.row:last-child{border:0}
+.ft{text-align:center;font-size:11px;color:var(--mu);padding:16px 16px 26px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .2s;z-index:8}
+.ov.on{opacity:1;pointer-events:auto}
+.dr{position:fixed;top:0;bottom:0;left:0;width:290px;max-width:86%;background:#11141c;border-right:1px solid var(--bd);z-index:9;transform:translateX(-102%);transition:transform .22s ease;display:flex;flex-direction:column;padding:14px 0;box-shadow:10px 0 40px rgba(0,0,0,.6);overflow-y:auto}
+.dr.on{transform:none}
+.dh{display:flex;align-items:center;gap:12px;padding:6px 18px 16px;margin-bottom:6px;border-bottom:1px solid var(--bd)}
+.dh b{font-size:14px;line-height:1.3}
+.dr .i{height:46px;display:flex;align-items:center;gap:14px;margin:2px 10px;padding:0 14px;border:0;border-radius:12px;background:none;color:#d6dbe6;font-size:14px;text-align:left;width:calc(100% - 20px)}
+.dr .i.a{background:linear-gradient(90deg,rgba(37,99,235,.38),rgba(37,99,235,.06));color:#fff;font-weight:700}
+.dr .sp{margin-top:auto;padding:12px 20px 0;font-size:11px;color:var(--mu)}
+.ctr{min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:14px;max-width:420px;margin:0 auto;padding:28px 20px;text-align:center}
+.big{width:96px;height:96px;margin:0 auto;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#facc15,#c2410c);display:flex;align-items:center;justify-content:center;font-weight:800;color:#1c1917;box-shadow:0 0 0 4px rgba(255,255,255,.12),0 14px 30px rgba(0,0,0,.4)}
+.err{background:#7f1d1d;color:#fecaca;border-radius:12px;padding:10px 12px;font-size:13px}
+.left{text-align:left}
+.opt{display:flex;align-items:center;gap:12px;min-height:50px;padding:6px 0;border-bottom:1px solid var(--bd);font-size:14px}
+.opt input{width:22px;height:22px;accent-color:#22c55e;flex:none}.opt em{margin-left:auto;font-size:12px;color:var(--mu);font-style:normal;text-align:right}.opt.off{opacity:.45}
+.stat{flex-direction:column;gap:3px;min-height:86px;padding:10px 6px;font-weight:600;text-align:center}.stat span{font-size:11px;opacity:.92}.stat b{font-size:19px}
+.ph{width:84px;height:104px;border-radius:14px;object-fit:cover;background:#2a2f3d;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mu)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div id="root"></div><dialog id="dg"></dialog>
+<div id="app"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-const SUPABASE_URL="https://qyawgfovjauxjzwdwdqk.supabase.co",SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5YXdnZm92amF1eGp6d2R3ZHFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MzQ4MzEsImV4cCI6MjEwODMxMDgzMX0.LbKQbu89Qm1ye9m7etnTZ8aAiD05D9yoHuA_raVMNcY";
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let S={name:"Amicale",tag:"",logo:"",nActive:0,users:[],tx:[],infos:[],recus:[],docs:[],pages:[]};
-const save=()=>{};
-const emailOf=p=>p.replace(/\D/g,"")+"@amicale.app";
-const fail=e=>{if(e){alert("Erreur : "+(e.message||e));return true}};
-async function loadPublic(){const {data}=await sb.from("settings").select("name,tagline,logo").eq("id",1).maybeSingle();if(data){S.name=data.name;S.tag=data.tagline||"";S.logo=data.logo||""}}
-async function loadAll(){const q=(t,o,a)=>sb.from(t).select("*").order(o,{ascending:!!a});
-const [st,pr,tx,inf,pg,rc,dc,ac]=await Promise.all([sb.from("settings").select("*").eq("id",1).maybeSingle(),adm()?q("profiles","created_at",1):Promise.resolve({data:[]}),q("transactions","date"),q("infos","created_at"),q("pages","created_at"),q("receipts","date"),q("documents","created_at"),sb.rpc("active_count")]);
-if(st.data){S.name=st.data.name;S.tag=st.data.tagline||"";S.logo=st.data.logo||""}
-S.nActive=ac.data||0;
-S.users=(pr.data||[]).map(p=>({id:p.id,n:p.first_name+" "+p.last_name,p:p.phone,r:p.role,on:p.status=="active"?1:0,pend:p.status=="pending"?1:0,rej:p.status=="rejected"?1:0}));
-const dt=r=>(r.created_at||"").slice(0,10);
-S.tx=(tx.data||[]).map(t=>({id:t.id,d:t.date,l:t.label,c:t.description,m:+t.amount}));
-S.infos=(inf.data||[]).map(x=>({id:x.id,t:x.title,c:x.content,d:dt(x)}));
-S.pages=(pg.data||[]).map(x=>({id:x.id,t:x.title,c:x.content,d:dt(x)}));
-S.recus=(rc.data||[]).map(x=>({id:x.id,t:x.title,k:x.kind,m:+x.amount,d:x.date,c:x.description,u:x.file_path}));
-S.docs=(dc.data||[]).map(x=>({id:x.id,t:x.title,c:x.description,u:x.file_path,d:dt(x)}));
-const all=[...S.recus,...S.docs],paths=all.map(x=>x.u).filter(Boolean);
-if(paths.length){const {data}=await sb.storage.from("files").createSignedUrls(paths,3600),m={};(data||[]).forEach(o=>m[o.path]=o.signedUrl);all.forEach(x=>x.url=m[x.u])}}
-async function enter(id){const {data:p}=await sb.from("profiles").select("*").eq("id",id).maybeSingle();
-if(!p||p.status!="active"){await sb.auth.signOut();err=!p?"Profil introuvable.":p.status=="pending"?"Votre compte est en attente de validation par un administrateur.":p.status=="rejected"?"Votre demande de compte a été rejetée.":"Compte désactivé.";return false}
-U={id:p.id,n:p.first_name+" "+p.last_name,p:p.phone,r:p.role};cur="dash";await loadAll();return true}
-async function boot(){if(SUPABASE_URL.includes("VOTRE")){$("root").innerHTML='<div class="lgn"><div class="lc"><h1>Configuration requise</h1><p class="sub">Renseignez SUPABASE_URL et SUPABASE_KEY au début du script (voir LISEZ-MOI.md).</p></div></div>';return}
-await loadPublic();const {data:{session}}=await sb.auth.getSession();if(session)await enter(session.user.id);render();
-document.addEventListener("visibilitychange",()=>{if(!document.hidden&&U)loadAll().then(render)})}
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const fc=n=>Math.round(n).toLocaleString("fr-FR").replace(/\u202f/g,"\u00a0")+" FCFA";
-const fd=d=>new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});
-const $=id=>document.getElementById(id),today=()=>new Date().toISOString().slice(0,10);
-const I={home:"M3 10.5 12 3l9 7.5V21H3z M9 21v-6h6v6",wallet:"M20 7H5a2 2 0 0 1 0-4h13v4 M3 5v14a2 2 0 0 0 2 2h15V7 M16 14h.01",receipt:"M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2z M9 8h6 M9 12h6",mega:"M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z M15 9a4 4 0 0 1 0 6 M18 6a8 8 0 0 1 0 12",file:"M6 3h8l5 5v13H6z M14 3v5h5",book:"M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z M4 19V5",users:"M16 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2 M9.5 10a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7 M21 20v-2a4 4 0 0 0-3-3.9 M16 3.1a3.5 3.5 0 0 1 0 6.8",sliders:"M4 6h10 M18 6h2 M4 12h4 M12 12h8 M4 18h12 M14 4v4 M8 10v4 M16 16v4",plus:"M12 5v14M5 12h14",eye:"M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6",trash:"M4 7h16 M9 7V4h6v3 M6 7l1 13h10l1-13",out:"M9 21H5V3h4 M16 17l5-5-5-5 M21 12H9",check:"M5 12l5 5 9-9",x:"M6 6l12 12M18 6 6 18",dots:"M5 12h.01M12 12h.01M19 12h.01",up:"M7 17 17 7M8 7h9v9",down:"M7 7l10 10M17 8v9H8"};
-const ic=(n,s=20)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${I[n]}"/></svg>`;
-let U=null,cur="dash",lt="in",err="",rf="all",sheet=0;
-const adm=()=>U&&(U.r=="admin"||U.r=="owner"),own=()=>U&&U.r=="owner",rl=r=>r=="owner"?"Propriétaire":r=="admin"?"Administrateur":"Membre",sum=f=>S.tx.filter(f).reduce((a,t)=>a+t.m,0);
-const lg=s=>S.logo?`<img class="lgo" src="${S.logo}" alt="" style="width:${s}px;height:${s}px">`:`<div class="lgo" style="width:${s}px;height:${s}px;font-size:${Math.round(s*.42)}px">${esc((S.name||"A")[0])}</div>`;
-const ini=n=>n.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase();
-I.grid="M4 4h6v6H4z M14 4h6v6h-6z M4 14h6v6H4z M14 14h6v6h-6z";I.menu="M4 7h16M4 12h16M4 17h16";
-const N=[["dash","Tableau de bord","grid","#a78bfa","#6d28d9","#4c1d95"],["cai","Caisse","wallet","#34d399","#059669","#065f46"],["inf","Infos","mega","#38bdf8","#0284c7","#075985"],["rec","Reçus et factures","receipt","#fbbf24","#ea580c","#9a3412"],["doc","Documents","file","#60a5fa","#2563eb","#1e3a8a"],["pag","Pages","book","#e879f9","#a855f7","#7e22ce"],["mem","Membres","users","#fb923c","#ef4444","#9f1239",1],["par","Paramètres","sliders","#94a3b8","#475569","#1e293b",1]];
-const go=t=>{cur=t;sheet=0;render();scrollTo(0,0)};
-function render(){document.title=S.name;
-if(!U){$("root").innerHTML=`<div class="lgn"><div class="lc"><div class="rw" style="justify-content:flex-start;margin-bottom:18px;flex-wrap:nowrap">${lg(60)}<b style="font-size:20px;line-height:1.2">${esc(S.name)}</b></div>
-<div class="seg"><button class="${lt=="in"?"on":""}" onclick="lt='in';err='';render()">Connexion</button><button class="${lt=="up"?"on":""}" onclick="lt='up';err='';render()">Créer un compte</button></div>
-<h1 style="font-size:26px">${lt=="in"?"Bon retour parmi nous":"Rejoignez l’amicale"}</h1><p class="sub">${lt=="in"?"Connectez-vous avec votre numéro de téléphone.":"Un administrateur validera votre compte."}</p>
-${lt=="up"?'<input id="lf" placeholder="Prénom"><input id="ln" placeholder="Nom">':""}<input id="lp" type="tel" placeholder="Numéro de téléphone"><input id="lw" type="password" placeholder="Mot de passe">${err?`<p class="err">${err}</p>`:""}
-<button class="b3" style="--a:#a78bfa;--b:#7c3aed;--d:#5b21b6;width:100%;justify-content:center;padding:15px;margin:0" onclick="${lt=="in"?"login()":"signup()"}">${lt=="in"?"Se connecter":"Créer mon compte"}</button><div class="ft">Plateforme créée par <b>Julien D. Y. Lukos</b></div></div></div>`;return}
-const pc=S.users.filter(u=>u.pend).length,vis=N.filter(n=>!n[6]||adm()),
-mi=n=>`<button class="mi ${n[0]==cur?"on":""}" onclick="go('${n[0]}')"><span class="ti" style="--a:${n[3]};--b:${n[4]};--d:${n[5]}">${ic(n[2],17)}</span>${n[1]}${n[0]=="mem"&&pc?`<em class="bg">${pc}</em>`:""}</button>`;
-$("root").innerHTML=`<header class="top"><button class="mb" onclick="sheet=1;render()">${ic("menu",22)}</button>${lg(40)}<b>${esc(S.name)}</b></header>
-<div id="ov" class="${sheet?"show":""}" onclick="sheet=0;render()"></div>
-<aside id="dw" class="${sheet?"open":""}"><div class="hd">${lg(46)}<div><b>${esc(S.name)}</b><small>${esc(S.tag)}</small></div></div>
-<div class="cap">MENU</div>${vis.filter(n=>!n[6]).map(mi).join("")}${adm()?`<div class="cap">ADMINISTRATION</div>`+vis.filter(n=>n[6]).map(mi).join(""):""}
-<div class="me"><div class="rw0"><div class="av">${ini(U.n)}</div><div><b>${esc(U.n)}</b><small>${rl(U.r)}</small></div></div><button class="out" onclick="out()">${ic("out",18)}Déconnexion</button></div></aside>
-<main>${V[cur]()}<div class="ft">Plateforme créée par <b>Julien D. Y. Lukos</b></div></main>`}
-async function login(){const p=$("lp").value.trim(),w=$("lw").value;err="";if(!p||!w){err="Veuillez remplir tous les champs.";return render()}
-const {data,error}=await sb.auth.signInWithPassword({email:emailOf(p),password:w});
-if(error){err="Numéro ou mot de passe incorrect.";return render()}
-await enter(data.user.id);render()}
-async function signup(){const f=$("lf").value.trim(),l=$("ln").value.trim(),p=$("lp").value.trim(),w=$("lw").value;
-if(!f||!l||!p||!w){err="Veuillez remplir tous les champs.";return render()}
-if(w.length<6){err="Le mot de passe doit contenir au moins 6 caractères.";return render()}
-const {error}=await sb.auth.signUp({email:emailOf(p),password:w,options:{data:{first_name:f,last_name:l,phone:p}}});
-if(error){err=/registered|exists/i.test(error.message)?"Ce numéro est déjà utilisé.":"Erreur : "+error.message;return render()}
-await sb.auth.signOut();lt="in";err="Compte créé ! Un administrateur doit le valider avant votre première connexion.";render()}
-function form(title,fl,cb){$("dg").innerHTML=`<h2 style="margin:0 0 14px;font-size:18px">${title}</h2>`+fl.map(f=>{const id="f_"+f[0];return f[1]=="area"?`<textarea id="${id}" rows="3" placeholder="${f[2]}"></textarea>`:f[1]=="sel"?`<select id="${id}">${f[3].map(o=>`<option>${o}</option>`).join("")}</select>`:(f[1]=="date"||f[1]=="file"?`<div class="k" style="margin:2px 0 6px">${f[2]}</div>`:"")+`<input id="${id}" type="${f[1]}" ${f[1]=="file"?'accept="image/*,application/pdf"':`placeholder="${f[2]}"`}>`}).join("")+`<div class="rw" style="margin-top:6px"><button class="lnk" onclick="$('dg').close()">Annuler</button><button class="bt t1" id="ok">Enregistrer</button></div>`;
-$("dg").showModal();$("ok").onclick=async()=>{const v={};for(const f of fl){const e=$("f_"+f[0]);v[f[0]]=f[1]=="file"?(e.files[0]||null):e.value.trim()}if(!v[fl[0][0]])return;$("ok").disabled=true;$("ok").textContent="Envoi…";try{await cb(v)}catch(x){fail(x)}$("dg").close();await loadAll();render()}}
-const up=async f=>{if(!f)return null;if(f.size>8e6)throw new Error("Fichier trop volumineux (8 Mo max).");const p=U.id+"/"+Date.now()+"-"+f.name.replace(/[^\w.-]+/g,"_");const {error}=await sb.storage.from("files").upload(p,f,{contentType:f.type});if(error)throw error;return p};
-const ins=async(t,o)=>{const {error}=await sb.from(t).insert(o);if(error)throw error};
-const addTx=sg=>form(sg>0?"Nouvelle entrée":"Nouvelle dépense",[["l","text","Libellé"],["m","number","Montant (FCFA)"],["c","area","Description"]],v=>ins("transactions",{label:v.l,description:v.c,amount:sg*Math.abs(+v.m||0),date:today()}));
-const addInf=()=>form("Nouvelle info",[["t","text","Titre"],["c","area","Message"]],v=>ins("infos",{title:v.t,content:v.c}));
-const addRec=()=>form("Nouveau justificatif",[["t","text","Titre (ex. Reçu de versement)"],["k","sel","",["Recette","Dépense"]],["m","number","Montant (FCFA)"],["dt","date","Date"],["c","area","Description"],["f","file","Fichier (image ou PDF)"]],async v=>ins("receipts",{title:v.t,kind:v.k,amount:Math.abs(+v.m||0),date:v.dt||today(),description:v.c,file_path:await up(v.f)}));
-const addDoc=()=>form("Nouveau document",[["t","text","Titre"],["c","area","Description"],["f","file","Fichier (image ou PDF)"]],async v=>ins("documents",{title:v.t,description:v.c,file_path:await up(v.f)}));
-const addPag=()=>form("Nouvelle page",[["t","text","Titre"],["c","area","Contenu"]],v=>ins("pages",{title:v.t,content:v.c}));
-const TB={tx:"transactions",infos:"infos",pages:"pages",recus:"receipts",docs:"documents"};
-const del=async(k,i)=>{if(!confirm("Supprimer ?"))return;const x=S[k][i],{error}=await sb.from(TB[k]).delete().eq("id",x.id);if(fail(error))return;if(x.u)await sb.storage.from("files").remove([x.u]);await loadAll();render()};
-const saveSet=async()=>{const {error}=await sb.from("settings").update({name:$("nm").value||S.name,tagline:$("tg").value}).eq("id",1);if(fail(error))return;await loadAll();render()};
-const rmLogo=async()=>{await sb.from("settings").update({logo:""}).eq("id",1);await loadAll();render()};
-const out=async()=>{await sb.auth.signOut();U=null;sheet=0;S.users=[];render()};
-const isP=u=>(u||"").toLowerCase().endsWith(".pdf");
-const pdfShow=async u=>{const p=$("pv");try{pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";const {data,error}=await sb.storage.from("files").download(u);if(error)throw error;const d=await pdfjsLib.getDocument({data:new Uint8Array(await data.arrayBuffer())}).promise;p.innerHTML="";for(let n=1;n<=d.numPages;n++){const pg=await d.getPage(n),vp=pg.getViewport({scale:1.6}),c=document.createElement("canvas");c.width=vp.width;c.height=vp.height;c.style.cssText="width:100%;border-radius:12px;margin-bottom:10px;-webkit-touch-callout:none;user-select:none";c.oncontextmenu=()=>false;p.appendChild(c);await pg.render({canvasContext:c.getContext("2d"),viewport:vp}).promise}}catch(e){p.textContent="Impossible d’afficher ce PDF."}};
-const viewF=(k,i)=>{const x=S[k][i];$("dg").innerHTML=`<h2 style="margin:0 0 6px;font-size:18px">${esc(x.t)}</h2>${x.m!=null?`<div class="${x.k=="Dépense"?"ko":"ok"}" style="font-size:20px">${fc(x.m)}</div>`:""}${x.c?`<p class="sub" style="margin:6px 0">${esc(x.c)}</p>`:""}${x.u?(isP(x.u)?'<div id="pv" class="sub" style="margin:10px 0">Chargement…</div>':`<img src="${x.url}" alt="" draggable="false" oncontextmenu="return false" style="width:100%;border-radius:14px;margin:10px 0;-webkit-touch-callout:none;user-select:none">`):""}<button class="bt t4 s" onclick="$('dg').close()">Fermer</button>`;$("dg").showModal();if(isP(x.u))pdfShow(x.u)};
-function setLogo(i){const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),s=Math.min(1,200/Math.max(im.width,im.height));c.width=im.width*s;c.height=im.height*s;c.getContext("2d").drawImage(im,0,0,c.width,c.height);S.logo=c.toDataURL("image/png");sb.from("settings").update({logo:S.logo}).eq("id",1).then(({error})=>{fail(error);render()})};im.src=r.result};r.readAsDataURL(f)}
-const setSt=async(i,st)=>{const {error}=await sb.from("profiles").update({status:st}).eq("id",S.users[i].id);if(fail(error))return;await loadAll();render()};
-const setRole=async(i,r)=>{if(!confirm(r=="admin"?"Nommer cette personne administrateur ?":"Retirer les droits d’administrateur ?"))return;const {error}=await sb.from("profiles").update({role:r}).eq("id",S.users[i].id);if(fail(error))return;await loadAll();render()};
-const dec=(i,ok)=>setSt(i,ok?"active":"rejected");
-const delU=async i=>{if(!confirm("Supprimer ce compte ?"))return;const {error}=await sb.rpc("admin_delete_user",{uid:S.users[i].id});if(fail(error))return;await loadAll();render()};
-const stt=u=>u.pend?"En attente":u.rej?"Rejeté":u.on?"Actif":"Désactivé";
-const head=(t,fn,s)=>`<div class="rw" style="margin-bottom:16px"><div><h1 style="margin:0">${t}</h1>${s?`<p class="sub" style="margin:2px 0 0">${s}</p>`:""}</div>${adm()&&fn?`<button class="bt t1 s" onclick="${fn}()">${ic("plus",16)}Ajouter</button>`:""}</div>`;
-const txRows=(n,d)=>[...S.tx].sort((a,b)=>b.d.localeCompare(a.d)).slice(0,n).map(t=>`<div class="ro"><span class="ic ${t.m<0?"out":"in"}">${ic(t.m<0?"down":"up",18)}</span><div class="m"><b>${esc(t.l)}</b><span>${fd(t.d)}${t.c?" · "+esc(t.c):""}</span></div><span class="${t.m<0?"ko":"ok"}">${t.m<0?"−":"+"}${fc(Math.abs(t.m))}</span>${d&&adm()?`<button class="ib" onclick="del('tx',${S.tx.indexOf(t)})">${ic("trash",17)}</button>`:""}</div>`).join("")||'<p class="sub">Aucune opération.</p>';
-const empty='<p class="sub" style="margin:0">Rien pour le moment.</p>';
-const textList=k=>`<div class="card">${S[k].map((x,i)=>`<div class="ro" style="align-items:flex-start"><span class="ic">${ic(k=="infos"?"mega":"book",18)}</span><div class="m"><b>${esc(x.t)}</b><span>${fd(x.d)}</span><p style="margin:6px 0 0">${esc(x.c)}</p></div>${adm()?`<button class="ib" onclick="del('${k}',${i})">${ic("trash",17)}</button>`:""}</div>`).join("")||empty}</div>`;
-const MOIS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
-const chart=ks=>{if(!ks.length)return'<p class="sub" style="margin:18px 0 4px;text-align:center">Aucune opération enregistrée pour le moment.</p>';
-const W=340,H=210,L=14,R=14,T=34,B=34,mx=Math.max(...ks.map(k=>k[1]),1),px=i=>ks.length>1?L+i*(W-L-R)/(ks.length-1):W/2,py=v=>T+(1-Math.max(v,0)/mx)*(H-T-B),pts=ks.map((k,i)=>px(i)+","+py(k[1])).join(" "),lb=v=>v>=1000?(Math.round(v/100)/10).toString().replace(".",",")+"k":Math.round(v),an=i=>ks.length>1&&i==0?"start":ks.length>1&&i==ks.length-1?"end":"middle",
-g=[0,.5,1].map(f=>`<line x1="${L}" x2="${W-R}" y1="${T+f*(H-T-B)}" y2="${T+f*(H-T-B)}" stroke="currentColor" stroke-opacity=".14"/>`).join("");
-return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block;margin-top:10px;color:var(--mut)"><defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5cf6" stop-opacity=".4"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></linearGradient></defs>${g}${ks.length>1?`<polygon points="${px(0)},${H-B} ${pts} ${px(ks.length-1)},${H-B}" fill="url(#gr)"/>`:""}<polyline points="${pts}" fill="none" stroke="#7c3aed" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${ks.map((k,i)=>`<circle cx="${px(i)}" cy="${py(k[1])}" r="4.5" fill="#fff" stroke="#7c3aed" stroke-width="2.5"/><text x="${px(i)}" y="${py(k[1])-10}" text-anchor="${an(i)}" font-size="11" font-weight="700" fill="#7c3aed">${lb(k[1])}</text><text x="${px(i)}" y="${H-12}" text-anchor="${an(i)}" font-size="11" fill="currentColor">${k[0].slice(5)}/${k[0].slice(2,4)}</text>`).join("")}</svg>`};
-const V={
-dash(){const ent=sum(t=>t.m>0),dep=-sum(t=>t.m<0),li=S.infos[0],pc=S.users.filter(u=>u.pend).length,mo={};
-S.tx.forEach(t=>{const k=t.d.slice(0,7);mo[k]=(mo[k]||0)+t.m});let run=0;const ks=Object.keys(mo).sort().map(k=>[k,run+=mo[k]]).slice(-6),mx=Math.max(...ks.map(k=>Math.abs(k[1])),1);
-const st=(t,n,i,a,b,d,c)=>`<div class="st" style="--a:${a};--b:${b};--d:${d}${c?";color:"+c:""}"><div class="top2"><span>${t}</span><span class="sic">${ic(i,22)}</span></div><div class="n">${n}</div></div>`,
-bu=(s,f,i,x)=>`<button class="b3" style="${s}" onclick="${f}">${ic(i,18)}${x}</button>`;
-return `<div class="date">${new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}</div><div class="hi">Bonjour ${esc(U.n.split(" ")[0])}</div>
-${adm()?`<div class="acts">${bu("--a:#2dd4bf;--b:#059669;--d:#065f46","addTx(1)","plus","Entrée")}${bu("--a:#fb923c;--b:#e11d48;--d:#9f1239","addTx(-1)","plus","Dépense")}${bu("--a:#fcd34d;--b:#f59e0b;--d:#b45309;color:#3b1d00","addRec()","receipt","Reçu")}${bu("--a:#38bdf8;--b:#2563eb;--d:#1e3a8a","addInf()","mega","Info")}</div>`:""}
-${adm()&&pc?`<div class="card last" onclick="go('mem')" style="border-color:#f59e0b"><span class="ti" style="--a:#fb923c;--b:#ef4444;--d:#9f1239">${ic("users",22)}</span><div><small>Comptes à valider</small><b>${pc} demande${pc>1?"s":""} en attente</b></div><span class="mut">Voir</span></div>`:""}
-${li?`<div class="card last" onclick="go('inf')"><span class="ti" style="--a:#38bdf8;--b:#2563eb;--d:#1e3a8a">${ic("mega",22)}</span><div><small>Dernière info</small><b>${esc(li.t)}</b></div><span class="mut">Lire</span></div>`:""}
-<div class="stats">${st("Solde en caisse",fc(ent-dep),"wallet","#8b5cf6","#5b21b6","#3b0f8c")}${st("Total des entrées",fc(ent),"up","#34d399","#047857","#065f46")}${st("Total des dépenses",fc(dep),"down","#fb923c","#be123c","#9f1239")}${st("Membres actifs",S.nActive,"users","#fcd34d","#d97706","#b45309","#3b1d00")}</div>
-<div class="card"><div class="rw" style="flex-wrap:nowrap"><div><b class="ct">Évolution de la caisse</b><div class="sub" style="margin:0">Solde sur les 6 derniers mois</div></div><button class="vb" onclick="go('cai')">Voir la caisse</button></div>
-${chart(ks)}</div>`},
-cai(){const e=sum(t=>t.m>0),d=-sum(t=>t.m<0);return head("Caisse","","Suivi du budget en caisse")+`<div class="hero"><small>Solde actuel</small><div class="bal" style="margin-bottom:${adm()?16:0}px">${fc(e-d)}</div>${adm()?`<div class="bts" style="margin:0"><button class="bt t1 s" onclick="addTx(1)">${ic("up",16)}Entrée</button><button class="bt t2 s" onclick="addTx(-1)">${ic("down",16)}Dépense</button></div>`:""}</div><div class="card">${txRows(999,1)}</div>`},
-inf(){return head("Infos","addInf","Annonces de l’amicale")+textList("infos")},
-pag(){return head("Pages","addPag","Pages d’information")+textList("pages")},
-doc(){return head("Documents","addDoc","Statuts, procès-verbaux et rapports")+`<div class="card">${S.docs.map((x,i)=>`<div class="ro"><span class="ic">${ic("file",18)}</span><div class="m"><b>${esc(x.t)}</b><span>${fd(x.d)}${x.c?" · "+esc(x.c):""}</span></div>${x.u?`<button class="bt t4 s" onclick="viewF('docs',${i})">${ic("eye",15)}Voir</button>`:""}${adm()?`<button class="ib" onclick="del('docs',${i})">${ic("trash",17)}</button>`:""}</div>`).join("")||empty}</div>`},
-rec(){const R=S.recus,f=R.filter(x=>rf=="all"||x.k==rf),n=k=>R.filter(x=>x.k==k).length,ch=(k,l,c)=>`<button class="${rf==k?"on":""}" onclick="rf='${k}';render()">${l}<span>${c}</span></button>`;
-return head("Justificatifs","addRec","Reçus et factures des recettes et dépenses")+`<div class="seg">${ch("all","Tout",R.length)}${ch("Recette","Recettes",n("Recette"))}${ch("Dépense","Dépenses",n("Dépense"))}</div><div class="rg">${f.map(x=>{const i=R.indexOf(x),dp=x.k=="Dépense";return `<div class="rc"><div class="ph">${x.u&&!isP(x.u)?`<img src="${x.url}" alt="" draggable="false" oncontextmenu="return false">`:ic(x.u?"file":"receipt",34)}<span class="bd ${dp?"dp":""}">${x.k}</span></div><div class="rb"><b>${esc(x.t)}</b><div class="${dp?"ko":"ok"}" style="font-size:17px;margin:2px 0">${fc(x.m)}</div><div class="sub" style="margin:0;font-size:13px">${fd(x.d)}</div>${x.c?`<p class="cl">${esc(x.c)}</p>`:""}<div class="rw" style="margin-top:10px;flex-wrap:nowrap"><button class="bt t4 s" onclick="viewF('recus',${i})">${ic("eye",15)}Voir</button>${adm()?`<button class="ib" onclick="del('recus',${i})">${ic("trash",17)}</button>`:""}</div></div></div>`}).join("")||empty}</div>`},
-mem(){if(!adm())return"";const p=S.users.map((u,i)=>[u,i]).filter(x=>x[0].pend);
-const act=(u,i)=>{if(u.r=="owner"||u.id==U.id)return"";const ad=u.r=="admin";let h="";
-if(!u.pend&&(own()||!ad))h+=`<button class="lnk" onclick="setSt(${i},'${u.on?"disabled":"active"}')">${u.on?"Désactiver":"Activer"}</button>`;
-if(own()&&u.on)h+=`<button class="lnk" onclick="setRole(${i},'${ad?"member":"admin"}')">${ad?"Retirer admin":"Nommer admin"}</button>`;
-if(own())h+=`<button class="lnk" style="color:var(--ko)" onclick="delU(${i})">Supprimer</button>`;
-return h?`<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:6px">${h}</div>`:""};
-return head("Membres","","Comptes et accès à la plateforme")+(p.length?`<div class="card" style="border-color:#f59e0b"><b>Demandes en attente (${p.length})</b>${p.map(([u,i])=>`<div class="ro"><div class="av">${ini(u.n)}</div><div class="m"><b>${esc(u.n)}</b><span>${esc(u.p)}</span></div><button class="bt t1 s" onclick="dec(${i},1)">Valider</button><button class="bt t2 s" onclick="dec(${i},0)">Rejeter</button></div>`).join("")}</div>`:"")+
-`<div class="card">${S.users.map((u,i)=>`<div class="ro" style="align-items:flex-start"><div class="av">${ini(u.n)}</div><div class="m"><b>${esc(u.n)}</b><span>${esc(u.p)} · ${rl(u.r)}</span>${act(u,i)}</div><span class="tg ${u.pend?"w":u.on?"":"x"}">${stt(u)}</span></div>`).join("")}</div>`},
-par(){if(!adm())return"";return head("Paramètres","","Personnalisez la plateforme")+`<div class="card"><b>Logo</b><div class="rw" style="justify-content:flex-start;margin:12px 0;flex-wrap:nowrap">${lg(64)}<input type="file" accept="image/*" onchange="setLogo(this)" style="margin:0"></div>${S.logo?`<button class="lnk" onclick="rmLogo()">Retirer le logo</button>`:""}</div><div class="card"><div class="k" style="margin-bottom:6px">Nom de la plateforme</div><input id="nm" value="${esc(S.name)}"><div class="k" style="margin-bottom:6px">Slogan</div><input id="tg" value="${esc(S.tag)}"><button class="bt t1" onclick="saveSet()">Enregistrer</button></div>`}};
+const SB = supabase.createClient('https://qyawgfovjauxjzwdwdqk.supabase.co', 'sb_publishable_LFBLWE9Pd9-yzKW_Prc1kw_7Gs5amQh');
+const SLOGAN = 'Unis pour construire demain';
+let BR = { name: 'Amicale Projet Contingents 17 Fatick', logo: 'logo.png' };
+const logo = () => BR.logo ? `<img src="${esc(BR.logo)}" alt="Logo" onerror="this.outerHTML='Logo'">` : 'Logo';
+const FOOT = 'Administrateur et créateur: Julien D. Y. LUKOS';
+const $ = s => document.querySelector(s);
+const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const digits = p => String(p).replace(/\D/g, '');
+const mail = p => digits(p) + '@amicale-c17.com';
+let me = null, page = 'home', menu = false, tab = 'in', msg = '';
+const isAdm = () => me && ['admin', 'owner'].includes(me.role);
+const isOwn = () => me && me.role === 'owner';
+const BURGER = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+const COL = {teal:['#0f766e','#134e4a'], blue:['#2563eb','#1e3a8a'], green:['#15803d','#14532d'], red:['#b91c1c','#7f1d1d'], gray:['#4b5563','#1f2937'], vio:['#7c3aed','#4c1d95'], or:['#c2410c','#7c2d12']};
+const btn = (t, fn, c) => `<button class="b" style="--c:${COL[c][0]};--d:${COL[c][1]}" onclick="${fn}">${t}</button>`;
+const IC = { home: 'M3 11l9-8 9 8v10a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z', user: 'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0', wallet: 'M3 7h16a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2zM3 7l2-3h12M16 14h2', users: 'M9 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2 20a7 7 0 0114 0M17 4a3.5 3.5 0 010 7M22 20a7 7 0 00-4-6', inbox: 'M4 13l2-8h12l2 8M4 13v6h16v-6M4 13h5l1 2h4l1-2h5', list: 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01', gear: 'M12 15a3 3 0 100-6 3 3 0 000 6zM12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2', out: 'M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9' };
+const ico = n => `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
+
+async function loadBrand() {
+  const { data } = await SB.from('amicale_settings').select('key,value').in('key', ['amicale_name', 'amicale_logo']);
+  (data || []).forEach(r => { if (r.key === 'amicale_name' && r.value) BR.name = r.value; if (r.key === 'amicale_logo') BR.logo = r.value || 'logo.png'; });
+  document.title = BR.name;
+}
+async function boot() {
+  await loadBrand();
+  const { data: { session } } = await SB.auth.getSession();
+  me = null;
+  if (session) {
+    const { data } = await SB.from('amicale_profiles').select('*').eq('id', session.user.id).maybeSingle();
+    me = data;
+    if (!me) { await SB.auth.signOut(); msg = 'Compte introuvable. Crée un compte.'; }
+  }
+  render();
+}
+
+function authView() {
+  const up = tab === 'up';
+  return `<div class="ctr"><div class="big">${logo()}</div><div style="font-weight:800;font-size:17px">${esc(BR.name)}</div><div class="s">${SLOGAN}</div>
+  <div class="tabs"><button class="${up ? '' : 'on'}" onclick="setTab('in')">Connexion</button><button class="${up ? 'on' : ''}" onclick="setTab('up')">Créer un compte</button></div>
+  ${msg ? `<div class="err" role="alert">${esc(msg)}</div>` : ''}
+  <form class="left" onsubmit="${up ? 'signup' : 'signin'}(event)">
+  ${up ? `<label class="s">Prénom<input class="f" name="fn" required autocomplete="given-name"></label><label class="s" style="display:block;margin-top:10px">Nom (chiffres acceptés, ex. : Sarr N°1)<input class="f" name="ln" required autocomplete="family-name" placeholder="Sarr N°1"></label>` : ''}
+  <label class="s" style="display:block;margin-top:10px">Numéro de téléphone<input class="f" name="ph" type="tel" required autocomplete="tel"></label>
+  <label class="s" style="display:block;margin-top:10px">Mot de passe${up ? ' (6 caractères minimum)' : ''}<input class="f" name="pw" type="password" required minlength="6" autocomplete="${up ? 'new-password' : 'current-password'}"></label>
+  <button class="b" style="width:100%;margin-top:18px;--c:${up ? '#15803d' : '#2563eb'};--d:${up ? '#14532d' : '#1e3a8a'}">${up ? 'Créer mon compte' : 'Se connecter'}</button></form>
+  ${up ? '<div class="s">Un administrateur validera ton compte avant ta première connexion.</div>' : ''}
+  <div class="ft">${FOOT}</div></div>`;
+}
+function setTab(t) { tab = t; msg = ''; render(); }
+async function signin(e) {
+  e.preventDefault(); const f = new FormData(e.target);
+  const { error } = await SB.auth.signInWithPassword({ email: mail(f.get('ph')), password: f.get('pw') });
+  if (error) { msg = 'Numéro ou mot de passe incorrect.'; return render(); }
+  msg = ''; boot();
+}
+async function signup(e) {
+  e.preventDefault(); const f = new FormData(e.target); const ph = digits(f.get('ph'));
+  if (ph.length < 6) { msg = 'Numéro de téléphone invalide.'; return render(); }
+  const { error } = await SB.auth.signUp({ email: mail(ph), password: f.get('pw'),
+    options: { data: { app: 'amicale', first_name: f.get('fn').trim(), last_name: f.get('ln').trim(), phone: ph } } });
+  if (error) { msg = /registered|already/i.test(error.message) ? 'Ce numéro est déjà inscrit.' : error.message; return render(); }
+  msg = ''; boot();
+}
+async function logout() { await SB.auth.signOut(); me = null; menu = false; page = 'home'; tab = 'in'; render(); }
+
+function stateView(icon, titre, texte) {
+  return `<div class="ctr"><div class="big">${logo()}</div><div style="font-weight:800;font-size:17px">${esc(BR.name)}</div>
+  <div class="c" style="background:linear-gradient(135deg,#b45309,#78350f);padding:24px 20px"><div style="font-weight:800;font-size:19px">${titre}</div><div style="font-size:14px;color:#fde68a;margin-top:8px;line-height:1.5">${texte}</div></div>
+  ${btn('Actualiser', 'boot()', 'blue')}${btn('Se déconnecter', 'logout()', 'gray')}<div class="ft">${FOOT}</div></div>`;
+}
+
+const TITRES = { settings: 'Paramètres', home: 'Accueil', profile: 'Mon profil', budget: 'État du budget', situation: 'Situation des membres', requests: "Demandes d'inscription", members: 'Membres' };
+const stat = (l, v, fn, c) => `<button class="b stat" style="--c:${COL[c][0]};--d:${COL[c][1]}" onclick="${fn}"><span>${l}</span><b>${v}</b></button>`;
+Object.assign(IC, { star: 'M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z', bell: 'M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9M10 21a2 2 0 004 0', doc: 'M7 3h8l4 4v14H7zM15 3v4h4M10 12h6M10 16h6', image: 'M4 5h16v14H4zM4 15l5-5 4 4 3-3 4 4M9 9h.01', cal: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4', heart: 'M12 21s-8-5-8-11a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 10c0 6-8 11-8 11z', mega: 'M3 11v3h4l8 5V6L7 11zM18 9a4 4 0 010 6' });
+const PK = { honneur: { t: "Page d'honneur", ex: 'Titre ou année', thumb: 1 }, rappel: { t: 'Rappel important' }, annonce: { t: 'Annonces' }, statuts: { t: 'Statuts', pdf: 1 }, reglement: { t: 'Règlement intérieur', pdf: 1 }, image: { t: "Images de l'amicale", noTitle: 1 }, morts: { t: 'À nos morts', ex: 'Naissance – Décès', thumb: 1 } };
+Object.keys(PK).forEach(k => TITRES[k] = PK[k].t); TITRES.event = 'Situation du membre'; TITRES.pay = 'Payer ma cotisation'; TITRES.payments = 'Paiements à vérifier';
+const EVL = { fiancailles: 'Fiançailles', mariage: 'Mariage', circoncision: 'Circoncision', communion: 'Communion', bapteme: 'Baptême', deces: 'Décès' };
+const REL = { pere: 'Père', mere: 'Mère', enfant: 'Enfant', conjoint: 'Conjoint(e)' };
+function go(p) { page = p; menu = false; render(); }
+function tog() { menu = !menu; $('.dr').classList.toggle('on', menu); $('.ov').classList.toggle('on', menu); }
+function item(p, t, ic) { return `<button class="i ${page === p ? 'a' : ''}" onclick="go('${p}')">${ico(ic)}${t}</button>`; }
+
+function render() {
+  const a = $('#app');
+  if (!me) { a.innerHTML = authView(); return; }
+  const m = { pending: ['Compte en attente de validation', `Bonjour ${esc(me.first_name)}, ta demande a bien été envoyée. Un administrateur va la valider. Tu pourras alors accéder à la plateforme.`],
+    rejected: ['Demande rejetée', 'Ta demande d\'inscription a été rejetée. Contacte un administrateur de l\'amicale.'],
+    disabled: ['Compte désactivé', 'Ton compte est désactivé. Contacte un administrateur pour le réactiver.'],
+    deleted: ['Compte supprimé', 'Ce compte n\'est plus actif. Contacte un administrateur de l\'amicale.'] }[me.status];
+  if (m) { a.innerHTML = stateView('', m[0], m[1]); return; }
+  a.innerHTML = `<div class="top"><button class="ic" onclick="tog()" aria-label="Menu">${BURGER}<span class="dot" id="bd-dot"></span></button><div class="lg"><i class="lo">${logo()}</i><div><b>${esc(BR.name)}</b><span>${TITRES[page]}</span></div></div></div>
+  <main id="c" class="pg"><div class="s">Chargement…</div></main><div class="ft">${FOOT}</div>
+  <div class="ov ${menu ? 'on' : ''}" onclick="tog()"></div>
+  <nav class="dr ${menu ? 'on' : ''}"><div class="dh"><i class="lo" style="width:46px;height:46px">${logo()}</i><b>${esc(BR.name)}</b></div>
+  ${item('home', 'Accueil', 'home')}${item('profile', 'Mon profil', 'user')}${item('pay', 'Payer ma cotisation', 'wallet')}${item('honneur', "Page d'honneur", 'star')}${item('rappel', 'Rappel important', 'bell')}${item('annonce', 'Annonces', 'mega')}${item('statuts', 'Statuts', 'doc')}${item('reglement', 'Règlement intérieur', 'doc')}${item('budget', 'État du budget', 'wallet')}${item('situation', 'Situation des membres', 'users')}${item('image', "Images de l'amicale", 'image')}${item('morts', 'À nos morts', 'heart')}
+  ${isAdm() ? `<button class="i ${page === 'requests' ? 'a' : ''}" onclick="go('requests')">${ico('inbox')}Demandes d'inscription<span class="bdg" id="bd-req"></span></button>` + `<button class="i ${page === 'payments' ? 'a' : ''}" onclick="go('payments')">${ico('wallet')}Paiements à vérifier<span class="bdg" id="bd-pay"></span></button>` + item('members', 'Membres', 'list') + item('settings', 'Paramètres', 'gear') : ''}
+  <button class="i" onclick="logout()">${ico('out')}Se déconnecter</button><div class="sp">${FOOT}</div></nav>`;
+  setBadges(); refreshPending(); fill();
+}
+
+async function fill() {
+  const c = $('#c'); let h = '';
+  if (page === 'home') h = await homeV();
+  else if (page === 'profile') h = await profileV();
+  else if (page === 'settings') h = await settingsV();
+  else if (page === 'budget') h = await budgetV();
+  else if (page === 'situation') h = await situationV();
+  else if (page === 'event') h = await eventV();
+  else if (page === 'pay') h = await payV();
+  else if (page === 'payments') h = await paymentsV();
+  else if (PK[page]) h = await postsV(page);
+  else if (page === 'requests') h = await listV(['pending', 'rejected'], true);
+  else h = await listV(['active', 'disabled', 'deleted'], false);
+  if (c) c.innerHTML = h;
+  if (page === 'payments') loadShots();
+}
+
+const ST = { pending: ['En attente', '#c2410c'], rejected: ['Rejeté', '#b91c1c'], active: ['Actif', '#15803d'], disabled: ['Désactivé', '#4b5563'], deleted: ['Supprimé', '#b91c1c'] };
+const RL = { owner: ['Propriétaire', '#b45309'], admin: ['Administrateur', '#7c3aed'] };
+async function listV(statuses, req) {
+  const { data, error } = await SB.from('amicale_profiles').select('*').in('status', statuses).order('created_at', { ascending: false });
+  if (error) return `<div class="err">${esc(error.message)}</div>`;
+  if (!data.length) return `<div class="c s">${req ? 'Aucune demande en attente.' : 'Aucun membre.'}</div>`;
+  MB = {}; data.forEach(p => MB[p.id] = p);
+  const rows = data.map(p => {
+    const t = RL[p.role] || ST[p.status], who = `<div><div style="font-weight:700">${esc(p.first_name)} ${esc(p.last_name)}</div><div class="s">${esc(p.phone)}</div></div>`;
+    let ac = '';
+    if (p.id === me.id) ac = '';
+    else if (p.status === 'pending') ac = `<div class="g2">${btn('Valider', `act('${p.id}','active')`, 'green')}${btn('Rejeter', `act('${p.id}','rejected')`, 'red')}</div>`;
+    else if (p.status === 'rejected') ac = `<div style="margin-top:12px">${btn('Valider quand même', `act('${p.id}','active')`, 'green')}</div>`;
+    else if (p.role === 'owner') ac = '';
+    else if (p.status === 'active') ac = `<div class="g2">${btn('Désactiver', `act('${p.id}','disabled')`, 'gray')}${isOwn() ? btn(p.role === 'admin' ? 'Retirer admin' : 'Nommer admin', `setRole('${p.id}','${p.role === 'admin' ? 'member' : 'admin'}')`, 'vio') : ''}</div>`;
+    else ac = `<div class="g2">${btn(p.status === 'deleted' ? 'Restaurer' : 'Réactiver', `act('${p.id}','active')`, 'green')}</div>`;
+    if (isOwn() && p.id !== me.id && p.role !== 'owner' && ['active', 'disabled'].includes(p.status))
+      ac += `<div style="margin-top:12px">${btn('Supprimer', `del('${p.id}')`, 'red')}</div>`;
+    if (isOwn() && p.id !== me.id && p.role !== 'owner' && ['deleted', 'rejected'].includes(p.status))
+      ac += `<div style="margin-top:12px">${btn('Supprimer définitivement', `purge('${p.id}')`, 'red')}</div>`;
+    if (p.role !== 'owner' || isOwn())
+      ac += `<div style="margin-top:12px">${btnS('Modifier le nom', `renameMember('${p.id}')`, 'gray')}</div>`;
+    return `<div class="c" data-n="${esc(norm(p.first_name + ' ' + p.last_name + ' ' + p.phone))}"><div class="m">${who}<span class="tag" style="background:${t[1]}">${t[0]}</span></div>${ac}</div>`;
+  }).join('');
+  return `<div style="font-weight:700;font-size:16px">${req ? data.length + ' demande(s)' : data.length + ' compte(s)'}</div>${req ? '' : searchBox()}${rows}`;
+}
+async function act(id, status) {
+  const { error } = await SB.from('amicale_profiles').update({ status }).eq('id', id);
+  if (error) alert(error.message); fill();
+}
+async function setRole(id, role) {
+  const { error } = await SB.from('amicale_profiles').update({ role }).eq('id', id);
+  if (error) alert(error.message); fill();
+}
+function del(id) { if (confirm('Supprimer ce compte ? Il pourra être restauré plus tard.')) act(id, 'deleted'); }
+
+
+const YEAR = new Date().getFullYear(), MIN = 5000;
+const num = n => Number(n || 0).toLocaleString('fr-FR');
+const fcfa = n => num(n) + ' FCFA';
+const dfr = d => new Date(d + 'T00:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+const today = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+const btnS = (t, fn, c) => btn(t, fn, c).replace('class="b"', 'class="b sm"');
+async function trancheAmt() {
+  const { data } = await SB.from('amicale_settings').select('value').eq('key', 'tranche_amount').maybeSingle();
+  return Number(data?.value || 0);
+}
+
+async function homeV() {
+  const hr = new Date().getHours(), hello = hr >= 18 || hr < 5 ? 'Bonsoir' : 'Bonjour';
+  const [{ data: n }, { data: sm }, { data: ps }, { count: pend }, { count: pendPay }] = await Promise.all([SB.rpc('amicale_active_members_count'), SB.rpc('amicale_budget_summary'),
+    SB.from('amicale_posts').select('kind,title,body,created_at').in('kind', ['rappel', 'annonce']).order('created_at', { ascending: false }).limit(8),
+    isAdm() ? SB.from('amicale_profiles').select('id', { count: 'exact', head: true }).eq('status', 'pending') : Promise.resolve({ count: 0 }),
+    isAdm() ? SB.from('amicale_payments').select('id', { count: 'exact', head: true }).eq('status', 'pending') : Promise.resolve({ count: 0 })]);
+  if (isAdm()) { PENDING = pend || 0; PENDPAY = pendPay || 0; setBadges(); }
+  const b = sm || { entrees: 0, depenses: 0, prev_entrees: 0, prev_depenses: 0 };
+  const d = new Date(), pm = new Date(d.getFullYear(), d.getMonth() - 1, 1).toLocaleDateString('fr-FR', { month: 'short' });
+  const rap = (ps || []).find(p => p.kind === 'rappel'), ann = (ps || []).filter(p => p.kind === 'annonce').slice(0, 2);
+  return `<div style="padding:2px 4px"><div class="s">${d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</div><div style="font-size:28px;font-weight:800;letter-spacing:-.5px;margin-top:2px">${hello}, ${esc(me.first_name)}</div></div>
+  ${pendPay ? btn(ico('wallet') + pendPay + (pendPay > 1 ? ' paiements' : ' paiement') + ' à vérifier', "go('payments')", 'green') : ''}
+  ${pend ? btn(ico('inbox') + pend + (pend > 1 ? ' demandes' : ' demande') + " d'inscription en attente", "go('requests')", 'or') : ''}
+  <div class="c" style="background:linear-gradient(135deg,#15803d,#166534)"><div style="font-size:13px;color:#d1fae5">Somme globale disponible en caisse</div><div style="font-size:30px;font-weight:800;margin-top:6px">${fcfa((b.opening || 0) + b.entrees - b.depenses)}</div></div>
+  <div class="g3">${stat('Membres actifs', n ?? 0, "go('situation')", 'blue')}${stat('Entrées ' + pm, num(b.prev_entrees), "go('budget')", 'green')}${stat('Dépenses ' + pm, num(b.prev_depenses), "go('budget')", 'red')}</div>
+  <div class="q">${btn(ico('wallet') + 'État du budget', "go('budget')", 'blue')}${btn(ico('wallet') + 'Payer ma cotisation', "go('pay')", 'green')}${isAdm() ? btn(ico('users') + 'Situation', "go('situation')", 'teal') + btn(ico('inbox') + 'Demandes' + (pend ? ' (' + pend + ')' : ''), "go('requests')", 'or') : btn(ico('users') + 'Situation des membres', "go('situation')", 'teal').replace('class="b"', 'class="b wide"')}</div>
+  ${rap ? `<div class="c" style="background:linear-gradient(135deg,#7f1d1d,#451a1a)"><div style="font-weight:800;font-size:13px;color:#fecaca">RAPPEL IMPORTANT</div><div style="font-weight:700;margin-top:6px">${esc(rap.title)}</div><div style="font-size:14px;margin-top:4px;line-height:1.4;white-space:pre-wrap">${esc(rap.body)}</div></div>` : ''}
+  ${ann.length ? `<div class="c"><div style="font-weight:700;padding-bottom:4px">Dernières annonces</div>${ann.map(a => `<div class="row"><div><div>${esc(a.title)}</div><div class="s">${dfr(a.created_at.slice(0, 10))}</div></div></div>`).join('')}</div>` : ''}`;
+}
+
+async function profileV() {
+  const [{ data: ov }, { data: evs }, { data: pays }] = await Promise.all([SB.rpc('amicale_members_overview', { y: YEAR }),
+    SB.from('amicale_events').select('*').eq('member_id', me.id).eq('kind', 'deces'),
+    SB.from('amicale_payments').select('*').eq('member_id', me.id).eq('year', YEAR).order('created_at', { ascending: false })]);
+  const o = (ov || []).find(x => x.member_id === me.id) || { paid: 0, target: 0, fiancailles: 0, baptemes: 0, deces: 0 };
+  const pct = o.target ? Math.min(100, Math.round(o.paid * 100 / o.target)) : 0, rest = Math.max(0, o.target - o.paid);
+  const stT = { validated: ['Validé', '#15803d'], pending: ['En attente', '#c2410c'], rejected: ['Refusé', '#b91c1c'] };
+  const prow = (pays || []).map(x => `<div class="row"><div>${fcfa(x.amount)}<div class="s">${dfr(x.created_at.slice(0, 10))}${x.note ? ' · ' + esc(x.note) : ''}</div></div><span class="tag" style="background:${stT[x.status][1]}">${stT[x.status][0]}</span></div>`).join('');
+  const r = RL[me.role];
+  const fi = o.fiancailles >= 1, ma = o.groupe === 'mariage';
+  const er = (t, sub, tg, col) => `<div class="row"><div>${t}<div class="s">${sub}</div></div><span class="tag" style="background:${col}">${tg}</span></div>`;
+  const G = '#15803d', X = '#4b5563';
+  return `<div class="c" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)"><div class="m"><div style="font-weight:800;font-size:18px">${esc(me.first_name)} ${esc(me.last_name)}</div>${r ? `<span class="tag" style="background:${r[1]}">${r[0]}</span>` : ''}</div><div style="font-size:13px;color:#dbe6ff;margin-top:4px">${esc(me.phone)}</div></div>
+  <div class="c" style="background:linear-gradient(135deg,#15803d,#166534)"><div style="font-size:13px;color:#d1fae5">Cotisation ${YEAR}</div><div style="font-size:24px;font-weight:800;margin-top:4px">${num(o.paid)} / ${num(o.target)} FCFA</div>
+  <div style="height:12px;border-radius:6px;background:#14532d;margin-top:10px;overflow:hidden"><div style="width:${pct}%;height:100%;background:#86efac"></div></div><div style="font-size:13px;color:#d1fae5;margin-top:6px">${rest ? 'Reste ' + fcfa(rest) + ' · ' + pct + ' % versé' : 'Objectif atteint, merci !'}</div></div>
+  ${btn(ico('wallet') + 'Payer ma cotisation', "go('pay')", 'blue')}
+  <div class="c" style="padding-top:8px;padding-bottom:8px"><div style="font-weight:700;padding:6px 0">Mes versements ${YEAR}</div>${prow || '<div class="s" style="padding:8px 0">Aucun versement pour le moment. Versement minimum : ' + fcfa(MIN) + '.</div>'}</div>
+  <div class="c" style="padding-top:8px;padding-bottom:8px"><div class="m" style="padding:6px 0;flex-wrap:wrap"><b>Mes événements</b><div style="display:flex;gap:6px"><span class="tag" style="background:${fi ? G : X}">Fiancé(e) : ${fi ? 'Oui' : 'Non'}</span><span class="tag" style="background:${ma ? G : X}">Marié(e) : ${ma ? 'Oui' : 'Non'}</span></div></div>
+  ${er('Fiançailles', 'Limite : 1', o.fiancailles + '/1', fi ? X : G)}
+  ${er('Mariage, circoncision ou communion', o.groupe ? EVL[o.groupe] + ' célébré' : 'Un seul des trois · limite 1', (o.groupe ? 1 : 0) + '/1', o.groupe ? X : G)}
+  ${er('Baptêmes', `${o.baptemes} reçu(s) sur 4 · il te reste ${4 - o.baptemes}`, o.baptemes + '/4', o.baptemes >= 4 ? X : G)}
+  ${er('Décès', o.deces ? 'Parent de premier degré : ' + (evs || []).map(e => REL[e.relative]).join(', ') : 'Parent de premier degré uniquement', o.deces + ' reçu(s)', o.deces ? '#b45309' : X)}</div>`;
+}
+
+let BM = null;
+const MN = (y, m) => { const t = new Date(y, m - 1, 1).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' }); return t.charAt(0).toUpperCase() + t.slice(1); };
+const CHEV = d => `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+function shiftMonth(d) {
+  const nd = new Date(BM.y, BM.m - 1 + d, 1), now = new Date();
+  if (nd > new Date(now.getFullYear(), now.getMonth(), 1)) return;
+  BM = { y: nd.getFullYear(), m: nd.getMonth() + 1 }; fill();
+}
+async function budgetV() {
+  const now = new Date(); if (!BM) BM = { y: now.getFullYear(), m: now.getMonth() + 1 };
+  const p2 = n => String(n).padStart(2, '0');
+  const d0 = `${BM.y}-${p2(BM.m)}-01`, d1 = BM.m === 12 ? `${BM.y + 1}-01-01` : `${BM.y}-${p2(BM.m + 1)}-01`;
+  const [{ data: sm }, { data: mo }, { data: list, error }] = await Promise.all([SB.rpc('amicale_budget_summary'), SB.rpc('amicale_budget_month', { y: BM.y, m: BM.m }),
+    SB.from('amicale_movements').select('*').gte('op_date', d0).lt('op_date', d1).order('op_date', { ascending: false }).order('id', { ascending: false })]);
+  if (error) return `<div class="err">${esc(error.message)}</div>`;
+  const g = sm || { opening: 0, entrees: 0, depenses: 0 }, k = mo || { report: 0, entrees: 0, depenses: 0 };
+  const total = (g.opening || 0) + g.entrees - g.depenses, fin = k.report + k.entrees - k.depenses;
+  const cur = BM.y === now.getFullYear() && BM.m === now.getMonth() + 1;
+  const rows = (list || []).map(m => `<div class="row"><div style="min-width:0"><div>${esc(m.description)}</div><div class="s">${m.kind === 'entree' ? 'Entrée' : 'Dépense'} · ${dfr(m.op_date)}</div></div>
+    <div style="text-align:right;white-space:nowrap"><b style="color:${m.kind === 'entree' ? '#4ade80' : '#f87171'}">${m.kind === 'entree' ? '+' : '−'} ${num(m.amount)}</b>${isOwn() ? `<div style="margin-top:6px">${btnS('Supprimer', `delMov(${m.id})`, 'red')}</div>` : ''}</div></div>`).join('');
+  const form = isAdm() ? `<form class="c" onsubmit="addMov(event)"><div style="font-weight:700">Ajouter un mouvement</div>
+    <select class="f" name="kind" aria-label="Type"><option value="entree">Entrée d'argent</option><option value="depense">Dépense</option></select>
+    <input class="f" name="amount" type="number" min="1" step="1" inputmode="numeric" placeholder="Montant (FCFA)" required>
+    <input class="f" name="desc" placeholder="Description" required>
+    <input class="f" name="date" type="date" value="${cur ? today() : d0}" required>
+    <button class="b" style="width:100%;margin-top:14px;--c:#facc15;--d:#a16207;color:#1c1917;text-shadow:none">Enregistrer</button></form>` : '';
+  const open = isAdm() ? `<form class="c" onsubmit="saveOpening(event)"><label class="s">Solde initial (report de 2025), en FCFA<input class="f" name="op" type="number" step="1" inputmode="numeric" value="${g.opening || 0}" required></label>
+    <button class="b sm" style="width:100%;margin-top:12px">Enregistrer le solde initial</button></form>` : '';
+  return `<div class="c" style="background:linear-gradient(135deg,#15803d,#166534)"><div style="font-size:13px;color:#d1fae5">Somme disponible en caisse</div><div style="font-size:30px;font-weight:800;margin-top:6px">${fcfa(total)}</div><div style="font-size:12px;color:#d1fae5;margin-top:4px">dont solde initial (report 2025) : ${fcfa(g.opening || 0)}</div></div>
+  <div class="c m" style="padding:8px"><button class="ic" onclick="shiftMonth(-1)" aria-label="Mois précédent">${CHEV('M15 5l-7 7 7 7')}</button><b>${MN(BM.y, BM.m)}</b><button class="ic" onclick="shiftMonth(1)" aria-label="Mois suivant" ${cur ? 'disabled style="opacity:.3"' : ''}>${CHEV('M9 5l7 7-7 7')}</button></div>
+  <div class="g3"><div class="c st" style="background:linear-gradient(135deg,#15803d,#166534)"><div class="s" style="color:#d1fae5">Entrées</div><b>${num(k.entrees)}</b></div>
+  <div class="c st" style="background:linear-gradient(135deg,#b91c1c,#7f1d1d)"><div class="s" style="color:#fecaca">Dépenses</div><b>${num(k.depenses)}</b></div>
+  <div class="c st" style="background:linear-gradient(135deg,#2563eb,#1e3a8a)"><div class="s" style="color:#dbe6ff">Solde fin de mois</div><b>${num(fin)}</b></div></div>
+  <div class="s" style="text-align:center">Solde au début du mois : ${fcfa(k.report)}</div>
+  ${form}<div class="c" style="padding-top:8px;padding-bottom:8px"><div style="font-weight:700;padding:6px 0">Détail de ${MN(BM.y, BM.m)}</div>${rows || '<div class="s" style="padding:8px 0">Aucun mouvement ce mois-ci.</div>'}</div>${open}`;
+}
+async function saveOpening(e) {
+  e.preventDefault(); const v = parseInt(new FormData(e.target).get('op'), 10);
+  const { data, error } = await SB.from('amicale_settings').update({ value: String(v) }).eq('key', 'opening_balance').select();
+  if (error || !data.length) { alert(error ? error.message : "Exécute d'abord le fichier installation-complete.sql dans Supabase."); return; }
+  alert('Solde initial enregistré.'); fill();
+}
+const norm = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const searchBox = () => '<input class="f" type="search" placeholder="Rechercher un membre" aria-label="Rechercher un membre" oninput="filterCards(this.value)" style="margin-top:0">';
+function filterCards(q) { q = norm(q).trim(); document.querySelectorAll('#c [data-n]').forEach(e => { e.style.display = !q || e.dataset.n.includes(q) ? '' : 'none'; }); }
+async function addMov(e) {
+  e.preventDefault(); const f = new FormData(e.target);
+  const { error } = await SB.from('amicale_movements').insert({ kind: f.get('kind'), amount: parseInt(f.get('amount'), 10), description: f.get('desc').trim(), op_date: f.get('date') });
+  if (error) alert(error.message); fill();
+}
+async function delMov(id) {
+  if (!confirm('Supprimer ce mouvement ? Le solde sera recalculé.')) return;
+  const { error } = await SB.from('amicale_movements').delete().eq('id', id);
+  if (error) alert(error.message); fill();
+}
+
+let SIT = {};
+async function situationV() {
+  const { data, error } = await SB.rpc('amicale_members_overview', { y: YEAR });
+  if (error) return `<div class="err">${esc(error.message)}</div>`;
+  SIT = {}; (data || []).forEach(p => SIT[p.member_id] = p.first_name + ' ' + p.last_name);
+  const chip = (ok, t) => `<span class="tag" style="background:${ok ? '#15803d' : '#4b5563'}">${t}</span>`;
+  const tg = data && data[0] ? data[0].target : 0;
+  const rows = (data || []).map(p => { const pct = p.target ? Math.min(100, Math.round(p.paid * 100 / p.target)) : 0;
+    return `<div class="c" data-n="${esc(norm(p.first_name + ' ' + p.last_name))}"><div class="m"><b>${esc(p.first_name)} ${esc(p.last_name)}</b><span class="s">${pct} %</span></div>
+    <div style="height:10px;border-radius:5px;background:#2a2f3d;margin-top:10px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${pct >= 100 ? '#22c55e' : '#f59e0b'}"></div></div>
+    <div class="s" style="margin-top:6px">Cotisation ${YEAR} : ${num(p.paid)} / ${num(p.target)} FCFA</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">${chip(p.fiancailles > 0, 'Fiançailles ' + p.fiancailles + '/1')}${chip(!!p.groupe, p.groupe ? EVL[p.groupe] + ' 1/1' : 'Mar./Circ./Comm. 0/1')}${chip(p.baptemes > 0, 'Baptêmes ' + p.baptemes + '/4')}${chip(p.deces > 0, 'Décès ' + p.deces)}</div>
+    ${isAdm() ? `<div style="margin-top:12px">${btnS('Gérer la situation', `openEvent('${p.member_id}')`, 'or')}</div>` : ''}</div>`; }).join('');
+  return `<div style="font-weight:700;font-size:16px">Situation ${YEAR} · objectif : ${fcfa(tg)} par membre</div>${searchBox()}${rows || '<div class="c s">Aucun membre actif.</div>'}`;
+}
+
+let SHOT = null;
+function copyTxt(t) { if (navigator.clipboard) navigator.clipboard.writeText(t).then(() => alert('Copié : ' + t), () => prompt('Copie ce texte :', t)); else prompt('Copie ce texte :', t); }
+function setAmt(v) { const i = document.querySelector('input[name=amt]'); if (i) i.value = v; }
+function pickShot(inp) {
+  const f = inp.files[0]; SHOT = null; $('#sp').innerHTML = ''; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { const im = new Image(); im.onload = () => {
+    const k = Math.min(1, 1000 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+    c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    c.toBlob(b => { SHOT = b; $('#sp').innerHTML = `<img src="${URL.createObjectURL(b)}" alt="Capture choisie" style="max-width:100%;max-height:260px;border-radius:12px;margin-top:10px">`; }, 'image/jpeg', .72);
+  }; im.src = r.result; };
+  r.readAsDataURL(f);
+}
+async function payV() {
+  SHOT = null;
+  const [{ data: ov }, { data: st }] = await Promise.all([SB.rpc('amicale_members_overview', { y: YEAR }),
+    SB.from('amicale_settings').select('value').eq('key', 'wave_number').maybeSingle()]);
+  const o = (ov || []).find(x => x.member_id === me.id) || { paid: 0, target: 0 }, rest = Math.max(0, o.target - o.paid), wave = st && st.value;
+  if (!wave) return '<div class="c">Le numéro Wave de l\'amicale n\'est pas encore renseigné. Contacte un administrateur.</div>';
+  return `<div class="c" style="background:linear-gradient(135deg,#15803d,#166534)"><div style="font-size:13px;color:#d1fae5">Cotisation ${YEAR}</div><div style="font-size:24px;font-weight:800;margin-top:4px">${num(o.paid)} / ${num(o.target)} FCFA</div><div style="font-size:13px;color:#d1fae5;margin-top:4px">${rest ? 'Reste ' + fcfa(rest) : 'Objectif atteint, merci !'} · versement minimum ${fcfa(MIN)}</div></div>
+  <div class="c"><div class="s">1. Envoie l'argent par Wave à ce numéro</div><div style="font-size:26px;font-weight:800;margin-top:6px;letter-spacing:.5px">${esc(wave)}</div>
+  <div style="margin-top:10px">${btnS('Copier le numéro', `copyTxt('${esc(wave)}')`, 'blue')}</div></div>
+  <form class="c" onsubmit="submitPay(event)"><div class="s">2. Indique la somme envoyée</div>
+  <input class="f" name="amt" type="number" min="${MIN}" step="500" inputmode="numeric" placeholder="Montant (minimum ${num(MIN)} FCFA)" value="${MIN}" required>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button type="button" class="b sm" style="--c:#4b5563;--d:#1f2937" onclick="setAmt(5000)">5 000</button><button type="button" class="b sm" style="--c:#4b5563;--d:#1f2937" onclick="setAmt(10000)">10 000</button>${rest >= MIN ? `<button type="button" class="b sm" style="--c:#4b5563;--d:#1f2937" onclick="setAmt(${rest})">Tout le reste</button>` : ''}</div>
+  <div class="s" style="margin-top:16px">3. Ajoute la capture d'écran de la transaction Wave</div>
+  <label class="b sm" style="margin-top:8px;cursor:pointer;--c:#2563eb;--d:#1e3a8a">Choisir la capture<input type="file" accept="image/*" hidden onchange="pickShot(this)"></label><div id="sp"></div>
+  <label class="s" style="display:block;margin-top:14px">Référence de la transaction (facultatif)<input class="f" name="ref" maxlength="60"></label>
+  <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">J'ai payé</button></form>
+  <div class="s" style="text-align:center">Un administrateur vérifie ton paiement, puis ton total est mis à jour.</div>`;
+}
+async function submitPay(e) {
+  e.preventDefault(); const f = new FormData(e.target), amt = parseInt(f.get('amt'), 10);
+  if (!(amt >= MIN)) { alert('Le montant minimum est de ' + fcfa(MIN) + '.'); return; }
+  if (!SHOT) { alert("Ajoute la capture d'écran de ta transaction Wave."); return; }
+  const path = `${me.id}/${Date.now()}.jpg`;
+  const up = await SB.storage.from('amicale-proofs').upload(path, SHOT, { contentType: 'image/jpeg' });
+  if (up.error) { alert("Envoi de la capture impossible : " + up.error.message + ' (le fichier installation-complete.sql a-t-il été exécuté ?)'); return; }
+  const { error } = await SB.from('amicale_payments').insert({ member_id: me.id, year: YEAR, amount: amt, reference: (f.get('ref') || '').trim() || null, screenshot_path: path, status: 'pending', source: 'declared' });
+  if (error) { alert(error.message); return; }
+  alert('Paiement déclaré. Un administrateur va le vérifier.'); SHOT = null; go('profile');
+}
+async function paymentsV() {
+  const { data, error } = await SB.from('amicale_payments').select('*').eq('status', 'pending').order('created_at', { ascending: true });
+  if (error) return `<div class="err">${esc(error.message)}</div>`;
+  if (!data.length) return '<div class="c s">Aucun paiement à vérifier.</div>';
+  const { data: ps } = await SB.from('amicale_profiles').select('id,first_name,last_name').in('id', [...new Set(data.map(x => x.member_id))]);
+  const nm = {}; (ps || []).forEach(p => nm[p.id] = p.first_name + ' ' + p.last_name);
+  return `<div style="font-weight:700;font-size:16px">${data.length} paiement(s) à vérifier</div><div class="s">Compare avec les transactions reçues dans le compte Wave de l'amicale avant de valider.</div>` + data.map(x => `<div class="c">
+    <div class="m"><b>${esc(nm[x.member_id] || 'Membre')}</b><b style="color:#4ade80">${fcfa(x.amount)}</b></div>
+    <div class="s" style="margin-top:2px">${dfr(x.created_at.slice(0, 10))}${x.reference ? ' · réf. ' + esc(x.reference) : ''}</div>
+    ${x.screenshot_path ? `<a data-pa="1" target="_blank" rel="noopener"><img data-p="${esc(x.screenshot_path)}" alt="Capture du paiement" style="width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin-top:12px;background:#0f131b"></a>` : '<div class="s" style="margin-top:10px">Aucune capture.</div>'}
+    <div class="g2">${btn('Valider', `decidePay(${x.id},true)`, 'green')}${btn('Refuser', `decidePay(${x.id},false)`, 'red')}</div></div>`).join('');
+}
+async function loadShots() {
+  for (const img of document.querySelectorAll('img[data-p]')) {
+    const { data } = await SB.storage.from('amicale-proofs').createSignedUrl(img.dataset.p, 600);
+    if (data) { img.src = data.signedUrl; if (img.parentElement.dataset.pa) img.parentElement.href = data.signedUrl; }
+  }
+}
+async function decidePay(id, ok) {
+  let note = null;
+  if (!ok) { note = prompt('Motif du refus (facultatif)', ''); if (note === null) return; }
+  const { data, error } = await SB.from('amicale_payments').update({ status: ok ? 'validated' : 'rejected', note: note || null, decided_by: me.id, decided_at: new Date().toISOString() }).eq('id', id).select();
+  if (error || !data.length) alert(error ? error.message : 'Action impossible.');
+  refreshPending(); fill();
+}
+
+let NEWLOGO = null;
+async function settingsV() {
+  NEWLOGO = null;
+  const [{ data: st }, { data: tg }] = await Promise.all([SB.from('amicale_settings').select('key,value').in('key', ['wave_number', 'annual_target_default']), SB.rpc('amicale_target_for', { y: YEAR })]);
+  const g = k => ((st || []).find(r => r.key === k) || {}).value || '';
+  return `<form class="c" onsubmit="saveBrand(event)"><div style="font-weight:700;font-size:16px">Nom et logo de l'amicale</div>
+  <div style="display:flex;align-items:center;gap:14px;margin-top:14px"><div id="lp" class="lo" style="width:76px;height:76px;font-size:12px">${logo()}</div>
+  <label class="b sm" style="flex:1;cursor:pointer;--c:#2563eb;--d:#1e3a8a">Choisir un logo<input type="file" accept="image/*" hidden onchange="pickLogo(this)"></label></div>
+  <label class="s" style="display:block;margin-top:14px">Nom de l'amicale<input class="f" name="name" value="${esc(BR.name)}" required maxlength="80"></label>
+  <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">Enregistrer</button></form>
+  <form class="c" onsubmit="saveWave(event)"><div style="font-weight:700;font-size:16px">Numéro Wave de l'amicale</div>
+  <label class="s" style="display:block;margin-top:10px">Les membres paient sur ce numéro<input class="f" name="w" type="tel" value="${esc(g('wave_number'))}" placeholder="ex. 77 000 00 00"></label>
+  <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">Enregistrer le numéro</button></form>
+  <form class="c" onsubmit="saveTarget(event)"><div style="font-weight:700;font-size:16px">Objectif de cotisation ${YEAR}</div>
+  <label class="s" style="display:block;margin-top:10px">Par membre, en FCFA<input class="f" name="t" type="number" min="${MIN}" step="500" inputmode="numeric" value="${tg || ''}" required></label>
+  <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">Enregistrer l'objectif</button>
+  <div class="s" style="margin-top:10px">Versement minimum : ${fcfa(MIN)}. Objectif par défaut des autres années : ${fcfa(g('annual_target_default') || 50000)}.</div></form>
+  <div class="s" style="text-align:center">Le nom et le logo s'affichent en haut de toutes les pages et sur l'écran de connexion.</div>`;
+}
+async function saveWave(e) {
+  e.preventDefault(); const v = new FormData(e.target).get('w').trim();
+  const { data, error } = await SB.from('amicale_settings').update({ value: v }).eq('key', 'wave_number').select();
+  if (error || !data.length) { alert(error ? error.message : "Exécute d'abord le fichier installation-complete.sql dans Supabase."); return; }
+  alert('Numéro enregistré.');
+}
+async function saveTarget(e) {
+  e.preventDefault(); const v = parseInt(new FormData(e.target).get('t'), 10);
+  if (!(v >= MIN)) { alert("L'objectif doit être d'au moins " + fcfa(MIN) + '.'); return; }
+  const { error } = await SB.from('amicale_targets').upsert({ year: YEAR, amount: v });
+  alert(error ? error.message : 'Objectif enregistré.');
+}
+
+function pickLogo(inp) {
+  const f = inp.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { const im = new Image(); im.onload = () => {
+    const S = 192, c = document.createElement('canvas'); c.width = c.height = S;
+    const m = Math.min(im.width, im.height);
+    c.getContext('2d').drawImage(im, (im.width - m) / 2, (im.height - m) / 2, m, m, 0, 0, S, S);
+    NEWLOGO = c.toDataURL('image/png'); $('#lp').innerHTML = `<img src="${NEWLOGO}" alt="Logo">`;
+  }; im.src = r.result; };
+  r.readAsDataURL(f);
+}
+async function saveBrand(e) {
+  e.preventDefault(); const name = new FormData(e.target).get('name').trim();
+  const rows = [['amicale_name', name]]; if (NEWLOGO !== null) rows.push(['amicale_logo', NEWLOGO]);
+  for (const [k, v] of rows) {
+    const { data, error } = await SB.from('amicale_settings').update({ value: v }).eq('key', k).select();
+    if (error || !data.length) { alert(error ? error.message : "Exécute d'abord le fichier installation-complete.sql dans Supabase."); return; }
+  }
+  NEWLOGO = null; await loadBrand(); alert('Enregistré.'); render();
+}
+
+
+let EVM = null;
+function openEvent(id) { EVM = id; go('event'); }
+function relToggle() { const k = document.querySelector('input[name=k]:checked'); $('#rel').style.display = k && k.value === 'deces' ? 'block' : 'none'; }
+async function eventV() {
+  if (!EVM) return '<div class="c s">Choisis un membre dans « Situation des membres ».</div>';
+  const [{ data, error }, { data: pays }, { data: evs }] = await Promise.all([SB.rpc('amicale_members_overview', { y: YEAR }),
+    SB.from('amicale_payments').select('*').eq('member_id', EVM).eq('year', YEAR).order('created_at', { ascending: false }),
+    SB.from('amicale_events').select('*').eq('member_id', EVM).order('event_date', { ascending: false })]);
+  const p = (data || []).find(x => x.member_id === EVM);
+  if (error || !p) return `<div class="err">${esc(error ? error.message : 'Membre introuvable.')}</div>`;
+  SIT[EVM] = p.first_name + ' ' + p.last_name;
+  const stT = { validated: ['Validé', '#15803d'], pending: ['En attente', '#c2410c'], rejected: ['Refusé', '#b91c1c'] };
+  const prow = (pays || []).map(x => `<div class="row"><div>${fcfa(x.amount)}<div class="s">${dfr(x.created_at.slice(0, 10))} · <span style="color:${stT[x.status][1]}">${stT[x.status][0]}</span></div></div>${btnS('Supprimer', `delPay(${x.id})`, 'red')}</div>`).join('');
+  const evl = (evs || []).map(e => `<div class="row"><div>${EVL[e.kind]}${e.relative ? ' · ' + REL[e.relative] : ''}<div class="s">${dfr(e.event_date)}</div></div>${btnS('Supprimer', `delEvent(${e.id})`, 'red')}</div>`).join('');
+  const opt = (v, l, off, note) => `<label class="opt ${off ? 'off' : ''}"><input type="radio" name="k" value="${v}" ${off ? 'disabled' : ''} required onchange="relToggle()"><span>${l}</span><em>${note}</em></label>`;
+  const gOff = !!p.groupe, gN = gOff ? '1/1 · limite atteinte' : '0/1';
+  return `<div class="c" style="background:linear-gradient(135deg,#1e3a8a,#2563eb)"><div style="font-weight:800;font-size:18px">${esc(p.first_name)} ${esc(p.last_name)}</div><div style="font-size:13px;color:#dbe6ff;margin-top:4px">Cotisation ${YEAR} : ${num(p.paid)} / ${num(p.target)} FCFA</div></div>
+  <div class="c" style="padding-top:8px;padding-bottom:8px"><div style="font-weight:700;padding:6px 0">Versements ${YEAR}</div>${prow || '<div class="s" style="padding:8px 0">Aucun versement.</div>'}</div>
+  <form class="c" onsubmit="addPay(event)"><div style="font-weight:700">Ajouter un versement (main propre ou autre)</div>
+  <input class="f" name="amt" type="number" min="${MIN}" step="500" inputmode="numeric" placeholder="Montant (minimum ${num(MIN)} FCFA)" required>
+  <button class="b" style="width:100%;margin-top:14px;--c:#15803d;--d:#14532d">Valider le versement</button></form>
+  ${evl ? `<div class="c" style="padding-top:8px;padding-bottom:8px"><div style="font-weight:700;padding:6px 0">Événements enregistrés</div>${evl}</div>` : ''}
+  <form class="c" onsubmit="addEvent(event)" style="padding-top:8px"><div style="font-weight:700;padding:8px 0">Ajouter un événement</div>
+  ${opt('fiancailles', 'Fiançailles', p.fiancailles >= 1, p.fiancailles >= 1 ? '1/1 · limite atteinte' : '0/1')}
+  ${opt('mariage', 'Mariage', gOff, gN)}${opt('circoncision', 'Circoncision', gOff, gN)}${opt('communion', 'Communion', gOff, gN)}
+  ${opt('bapteme', 'Baptême', p.baptemes >= 4, p.baptemes + '/4')}${opt('deces', 'Décès (parent 1er degré)', false, p.deces + ' reçu(s)')}
+  <select class="f" id="rel" name="rel" aria-label="Parent concerné" style="display:none"><option value="pere">Père</option><option value="mere">Mère</option><option value="enfant">Enfant</option><option value="conjoint">Conjoint(e)</option></select>
+  <label class="s" style="display:block;margin-top:12px">Date<input class="f" name="date" type="date" value="${today()}" required></label>
+  <button class="b" style="width:100%;margin-top:16px;--c:#15803d;--d:#14532d">Enregistrer l'événement</button></form>
+  <div class="s" style="text-align:center">Mariage, circoncision et communion : un seul des trois par membre.</div>`;
+}
+async function addPay(e) {
+  e.preventDefault(); const amt = parseInt(new FormData(e.target).get('amt'), 10);
+  if (!(amt >= MIN)) { alert('Le montant minimum est de ' + fcfa(MIN) + '.'); return; }
+  const { error } = await SB.from('amicale_payments').insert({ member_id: EVM, year: YEAR, amount: amt, status: 'validated', source: 'admin', decided_by: me.id, decided_at: new Date().toISOString() });
+  if (error) alert(error.message + ' (le fichier installation-complete.sql a-t-il été exécuté ?)'); fill();
+}
+async function delPay(id) {
+  if (!confirm('Supprimer ce versement ? Le total du membre sera recalculé.')) return;
+  const { data, error } = await SB.from('amicale_payments').delete().eq('id', id).select();
+  if (error || !data.length) alert(error ? error.message : 'Suppression impossible.'); fill();
+}
+
+async function addEvent(e) {
+  e.preventDefault(); const f = new FormData(e.target), k = f.get('k');
+  const row = { member_id: EVM, kind: k, event_date: f.get('date') }; if (k === 'deces') row.relative = f.get('rel');
+  const { error } = await SB.from('amicale_events').insert(row);
+  if (error) { alert(error.message); return; }
+  alert('Événement enregistré.'); fill();
+}
+async function delEvent(id) {
+  if (!confirm('Supprimer cet événement ? Le compteur du membre sera recalculé.')) return;
+  const { error } = await SB.from('amicale_events').delete().eq('id', id);
+  if (error) alert(error.message); fill();
+}
+
+let NEWPH = '';
+function pickPhoto(inp) {
+  const f = inp.files[0]; if (!f) { NEWPH = ''; return; }
+  const r = new FileReader();
+  r.onload = () => { const im = new Image(); im.onload = () => {
+    const k = Math.min(1, 480 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+    c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    NEWPH = c.toDataURL('image/jpeg', .78); $('#pp').innerHTML = `<img src="${NEWPH}" alt="Aperçu" style="max-width:100%;border-radius:12px;margin-top:10px">`;
+  }; im.src = r.result; };
+  r.readAsDataURL(f);
+}
+let NEWPDF = null;
+function pickPdf(inp) {
+  const f = inp.files[0]; NEWPDF = null; $('#pp').innerHTML = '';
+  if (!f) return;
+  if (f.type !== 'application/pdf') { alert('Choisis un fichier PDF.'); inp.value = ''; return; }
+  if (f.size > 10 * 1024 * 1024) { alert('PDF trop lourd (10 Mo maximum).'); inp.value = ''; return; }
+  NEWPDF = f; $('#pp').innerHTML = `<div class="s" style="margin-top:10px">PDF choisi : ${esc(f.name)}</div>`;
+}
+async function postsV(k) {
+  NEWPH = ''; NEWPDF = null; const cf = PK[k];
+  const { data, error } = await SB.from('amicale_posts').select('*').eq('kind', k).order('created_at', { ascending: false }).limit(50);
+  if (error) return `<div class="err">${esc(error.message)}</div>`;
+  const form = isAdm() ? `<form class="c" onsubmit="addPost(event,'${k}')"><div style="font-weight:700">Ajouter</div>
+    ${cf.noTitle ? '' : '<input class="f" name="title" placeholder="Titre" required>'}
+    ${cf.ex ? `<input class="f" name="extra" placeholder="${cf.ex}">` : ''}
+    <textarea class="f" name="body" rows="${cf.pdf ? 3 : 5}" placeholder="Texte${cf.pdf ? ' (facultatif)' : ''}"${cf.noTitle || cf.pdf ? '' : ' required'}></textarea>
+    ${cf.pdf ? '<label class="b sm" style="margin-top:12px;cursor:pointer;--c:#2563eb;--d:#1e3a8a">Ajouter un PDF<input type="file" accept="application/pdf" hidden onchange="pickPdf(this)"></label>'
+      : '<label class="b sm" style="margin-top:12px;cursor:pointer;--c:#2563eb;--d:#1e3a8a">Ajouter une photo<input type="file" accept="image/*" hidden onchange="pickPhoto(this)"></label>'}<div id="pp"></div>
+    <button class="b" style="width:100%;margin-top:10px;--c:#facc15;--d:#a16207;color:#1c1917;text-shadow:none">Publier</button></form>` : '';
+  const cards = (data || []).map(p => {
+    const del = isAdm() ? `<div style="margin-top:12px">${btnS('Supprimer', `delPost(${p.id})`, 'red')}</div>` : '';
+    const pdf = p.file_url ? `<a class="b sm" href="${esc(p.file_url)}" target="_blank" rel="noopener" style="--c:#2563eb;--d:#1e3a8a;text-decoration:none;margin-top:12px">Ouvrir le PDF</a>` : '';
+    const txt = `<div style="min-width:0;flex:1">${p.title ? `<div style="font-weight:700;font-size:16px">${esc(p.title)}</div>` : ''}${p.extra ? `<div class="s" style="margin-top:2px">${esc(p.extra)}</div>` : ''}${p.body ? `<div style="font-size:14px;margin-top:8px;line-height:1.5;white-space:pre-wrap">${esc(p.body)}</div>` : ''}${pdf}<div class="s" style="margin-top:8px">Publié le ${dfr(p.created_at.slice(0, 10))}</div></div>`;
+    if (cf.thumb) return `<div class="c"><div style="display:flex;gap:14px">${p.photo ? `<img class="ph" src="${esc(p.photo)}" alt="">` : '<div class="ph">Photo</div>'}${txt}</div>${del}</div>`;
+    return `<div class="c">${p.photo ? `<img src="${esc(p.photo)}" alt="" style="width:100%;max-height:300px;object-fit:cover;border-radius:14px;margin-bottom:12px">` : ''}${txt}${del}</div>`;
+  }).join('');
+  return `${form}${cards || '<div class="c s">Rien n\'a encore été publié ici.</div>'}`;
+}
+async function addPost(e, k) {
+  e.preventDefault(); const f = new FormData(e.target); let file_url = null;
+  if (NEWPDF) {
+    const path = `${k}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.pdf`;
+    const up = await SB.storage.from('amicale-docs').upload(path, NEWPDF, { contentType: 'application/pdf' });
+    if (up.error) { alert("Envoi du PDF impossible : " + up.error.message + " (le fichier installation-complete.sql a-t-il été exécuté ?)"); return; }
+    file_url = SB.storage.from('amicale-docs').getPublicUrl(path).data.publicUrl;
+  }
+  const { error } = await SB.from('amicale_posts').insert({ kind: k, title: (f.get('title') || '').trim(), body: (f.get('body') || '').trim(), extra: (f.get('extra') || '').trim() || null, photo: NEWPH || null, file_url });
+  if (error) alert(error.message); NEWPH = ''; NEWPDF = null; fill();
+}
+async function delPost(id) {
+  if (!confirm('Supprimer cette publication ?')) return;
+  const { data: old } = await SB.from('amicale_posts').select('file_url').eq('id', id).maybeSingle();
+  const { error } = await SB.from('amicale_posts').delete().eq('id', id);
+  if (error) { alert(error.message); return; }
+  const u = old && old.file_url, i = u ? u.indexOf('/amicale-docs/') : -1;
+  if (i > 0) await SB.storage.from('amicale-docs').remove([decodeURIComponent(u.slice(i + 14))]);
+  fill();
+}
+
+
+let MB = {}, PENDING = 0, PENDPAY = 0;
+async function renameMember(id) {
+  const p = MB[id]; if (!p) return;
+  const fn = prompt('Prénom', p.first_name); if (fn === null) return;
+  const ln = prompt('Nom (tu peux ajouter un numéro, ex. : Sarr N°1)', p.last_name); if (ln === null) return;
+  if (!fn.trim() || !ln.trim()) { alert('Le prénom et le nom ne peuvent pas être vides.'); return; }
+  const { data, error } = await SB.from('amicale_profiles').update({ first_name: fn.trim(), last_name: ln.trim() }).eq('id', id).select();
+  if (error || !data.length) alert(error ? error.message : 'Modification impossible.'); fill();
+}
+async function purge(id) {
+  const p = MB[id], nm = p ? p.first_name + ' ' + p.last_name : 'ce compte';
+  if (!confirm(`Supprimer définitivement ${nm} ?\nSon compte et tout son historique (tranches, événements) disparaîtront. Cette action est irréversible.`)) return;
+  const { error } = await SB.rpc('amicale_purge_account', { uid: id });
+  if (error) alert(error.message + ' (le fichier installation-complete.sql a-t-il été exécuté ?)'); fill();
+}
+function setBadges() {
+  const b = $('#bd-req'), p = $('#bd-pay'), d = $('#bd-dot');
+  if (b) { b.textContent = PENDING; b.style.display = PENDING ? 'flex' : 'none'; }
+  if (p) { p.textContent = PENDPAY; p.style.display = PENDPAY ? 'flex' : 'none'; }
+  if (d) d.style.display = PENDING || PENDPAY ? 'block' : 'none';
+}
+async function refreshPending() {
+  if (!me || me.status !== 'active' || !isAdm()) return;
+  const [{ count: a }, { count: b }] = await Promise.all([SB.from('amicale_profiles').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+    SB.from('amicale_payments').select('id', { count: 'exact', head: true }).eq('status', 'pending')]);
+  PENDING = a || 0; PENDPAY = b || 0; setBadges();
+}
+
+setInterval(refreshPending, 60000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshPending(); });
+
+SB.auth.onAuthStateChange(() => {});
 boot();
-</script><script src="cotisations.js"></script>
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
 </body>
 </html>
