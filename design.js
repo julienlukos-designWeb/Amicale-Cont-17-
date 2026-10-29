@@ -30,6 +30,21 @@ css.textContent=`
 .pf{border-radius:28px;color:#fff;padding:18px 18px 70px;margin-bottom:0;background:linear-gradient(165deg,#141b45,#262c75 58%,#4338ca)}
 .pf .av{width:92px;height:92px;border-radius:30px;font-size:34px;border:4px solid rgba(255,255,255,.9);box-shadow:0 10px 24px -8px rgba(0,0,0,.5)}
 .fld{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.fld:last-child{border:0}.fld span{color:var(--mut);font-weight:600;font-size:14px}
+
+.top{background:linear-gradient(165deg,#141b45,#262c75)}
+.b3{border-radius:18px}
+.dhd{background:linear-gradient(165deg,#141b45,#262c75 60%,#4338ca);margin:-20px -16px 0;padding:6px 20px 84px;color:#fff}
+.acts4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:16px 8px}
+.ac{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13px;font-weight:700;text-align:center}
+.acb{width:58px;height:58px;border-radius:20px;display:grid;place-items:center;color:#fff;background:linear-gradient(150deg,var(--a),var(--b));box-shadow:0 5px 0 var(--d),0 10px 14px -6px var(--b)}
+.st{border-radius:24px;min-height:134px;padding:16px;gap:16px;box-shadow:0 7px 0 var(--d),0 16px 24px -12px var(--b)}
+.st .top2{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;align-items:flex-start}.st .sic{width:40px;height:40px;border-radius:13px}
+.st .ss{font-size:12px;font-weight:600;opacity:.9;margin-top:2px}.stats{margin:0 0 16px;gap:14px}
+.mc{border-radius:26px;padding:18px;color:#fff;margin-bottom:16px;background:linear-gradient(160deg,#0e7490,#0b4a5c);box-shadow:0 8px 0 #083a49,0 16px 24px -12px #0e7490}
+.mcb{height:12px;border-radius:99px;background:rgba(255,255,255,.28);overflow:hidden}.mcb i{display:block;height:100%;border-radius:99px;background:#fcd34d}
+.band{margin:-20px -16px 16px;padding:14px 20px 22px;color:#fff;border-radius:0 0 28px 28px}.band h1{margin:0}
+@media(min-width:1000px){.dhd,.band{margin:-28px -36px 16px}.dhd{margin-bottom:0}.stats{grid-template-columns:repeat(4,1fr)}}
+.hero2 .sic{width:40px;height:40px;border-radius:13px;background:rgba(255,255,255,.2);display:grid;place-items:center}
 `;
 document.head.appendChild(css);
 
@@ -53,7 +68,7 @@ async function loadDir(){
   S.dir=L;
 }
 const _ld=loadAll;
-loadAll=async function(){await _ld();try{await loadDir()}catch(e){S.dir=[]}};
+loadAll=async function(){await _ld();if(S.tgt&&S.tgt[2026]==null)S.tgt[2026]=10000;try{await loadDir()}catch(e){S.dir=[]}};
 
 /* ---------- Pages ---------- */
 const col=["#a78bfa,#6d28d9","#fb923c,#ea580c","#38bdf8,#0369a1","#f472b6,#be185d","#94a3b8,#475569","#34d399,#047857","#fbbf24,#b45309"],
@@ -95,18 +110,39 @@ N.splice(N.findIndex(n=>n[0]=="cot")+1,0,["ann","Membres","users","#a78bfa","#7c
 // "Mon profil" dans le menu = toujours mon profil
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button.mi,.tabs button");if(b&&/go\('prof'\)/.test(b.getAttribute("onclick")||""))S.pid=U&&U.id},true);
 
-/* ---------- Accueil : solde en grand + cartes ---------- */
+/* ---------- Accueil (identique à la maquette) ---------- */
 const _d=V.dash;
 V.dash=function(){
-  let h=_d.call(V);
-  const ent=sum(t=>t.m>0),dep=-sum(t=>t.m<0),ym=today().slice(0,7),net=sum(t=>t.d.slice(0,7)==ym);
-  const hero=`<div class="hero2"><small>Solde disponible en banque</small><div class="bal">${Math.round(ent-dep).toLocaleString("fr-FR").replace(/ /g," ")} <span>FCFA</span></div><span class="pil ${net<0?"x":""}">${net<0?"−":"+"} ${fc(Math.abs(net))} ce mois</span></div>`;
-  const y=new Date().getFullYear(),Y=Math.max(2026,y),A=Math.max(S.nActive,1),tot=S.cot.filter(c=>c.y==Y).reduce((a,c)=>a+c.m,0),pc=Math.min(100,Math.round(tot/(A*tgtOf(Y))*100));
-  const card=`<div class="st" style="--a:#0e7490;--b:#155e75;--d:#0b4a5c"><div class="top2"><span>Cotisations ${Y}</span><span class="sic">${ic("check",22)}</span></div><div class="n">${pc} %</div></div>`;
-  h=h.replace(/<div class="st" style="--a:#8b5cf6[\s\S]*?<\/div><\/div>/,"").replace(/(<div class="stats">[\s\S]*?)<\/div>\s*<div class="card"><div class="rw"/,"$1"+card+"</div><div class=\"card\"><div class=\"rw\"");
-  // le solde passe en tête, juste après le bonjour
-  h=h.replace(/(<div class="hi">[^<]*<\/div>)/,"$1"+hero);
-  return h};
+  const old=_d.call(V),ent=sum(t=>t.m>0),dep=-sum(t=>t.m<0),ym=today().slice(0,7),net=sum(t=>t.d.slice(0,7)==ym),
+   Y=Math.max(2026,new Date().getFullYear()),T=tgtOf(Y),mine=paidBy(U.id,Y),A=Math.max(S.nActive,1),tot=S.cot.filter(c=>c.y==Y).reduce((a,c)=>a+c.m,0),
+   pc=S.users.filter(u=>u.pend).length,li=S.infos[0],mp=Math.min(100,Math.round(mine/T*100)),
+   mo=new Date().toLocaleDateString("fr-FR",{month:"long"}),
+   i=old.indexOf('<div class="card"><div class="rw" style="flex-wrap:nowrap"><div><b class="ct">Évolution'),
+   chartCard=(i>=0?old.slice(i):"").replace("Voir la caisse","Détails"),
+   act=(l,f,ic_,a,b2,d,c)=>`<button class="ac" onclick="${f}"><span class="acb" style="--a:${a};--b:${b2};--d:${d}${c?";color:"+c:""}">${ic(ic_,24)}</span>${l}</button>`,
+   st=(t,n,sub,ic_,a,b2,d,c)=>`<div class="st" style="--a:${a};--b:${b2};--d:${d}${c?";color:"+c:""}"><div class="top2"><span>${t}</span><span class="sic">${ic(ic_,22)}</span></div><div><div class="n">${n}</div><div class="ss">${sub}</div></div></div>`;
+  return `<div class="dhd"><div class="date" style="color:#cfd4ff;text-transform:none">Bonjour,</div><div class="hi" style="margin:0;color:#fff">${esc(U.n)}</div></div>
+<div class="hero2" style="margin-top:-58px"><div class="rw" style="flex-wrap:nowrap"><small>Solde disponible en banque</small><span class="sic">${ic("wallet",22)}</span></div><div class="bal">${Math.round(ent-dep).toLocaleString("fr-FR").replace(/ /g," ")} <span>FCFA</span></div><div class="rw" style="justify-content:flex-start"><span class="pil ${net<0?"x":""}">${net<0?"−":"+"} ${fc(Math.abs(net))} ce mois</span><small style="text-transform:none;letter-spacing:0;font-weight:600">Mis à jour aujourd’hui</small></div></div>
+${adm()?`<div class="card acts4">${act("Entrée","addTx(1)","up","#34d399","#047857","#065f46")}${act("Dépense","addTx(-1)","down","#fb7185","#be123c","#9f1239")}${act("Reçu","addRec()","receipt","#fcd34d","#f59e0b","#b45309","#3b1d00")}${act("Info","addInf()","mega","#60a5fa","#2563eb","#1e3a8a")}</div>`:""}
+<div class="stats">${st("Entrées",Math.round(ent).toLocaleString("fr-FR").replace(/ /g," "),"FCFA · total","up","#047857","#065f46","#064e3b")}${st("Dépenses",Math.round(dep).toLocaleString("fr-FR").replace(/ /g," "),"FCFA · total","down","#be123c","#9f1239","#881337")}${st("Membres actifs",S.nActive,"comptes validés","users","#fbbf24","#f59e0b","#b45309","#3b1d00")}${st("Cotisations "+Y,Math.min(100,Math.round(tot/(A*T)*100))+" %",fc(tot)+" sur "+fc(A*T),"check","#0e7490","#155e75","#0b4a5c")}</div>
+<div class="mc"><div class="k" style="color:#bdeefb">Ma cotisation ${Y}</div><div class="rw" style="flex-wrap:nowrap;margin:2px 0 10px"><div style="font-size:30px;font-weight:800">${Math.round(mine).toLocaleString("fr-FR").replace(/ /g," ")} <span style="font-size:15px;opacity:.85">/ ${fc(T)}</span></div><span class="pil" style="background:rgba(255,255,255,.2);color:#fff">${mp} %</span></div><div class="mcb"><i style="width:${mp}%"></i></div>${window.payOpen?`<button class="b3" style="--a:#fcd34d;--b:#f59e0b;--d:#b45309;color:#3b1d00;width:100%;justify-content:center;margin:14px 0 4px;border-radius:16px" onclick="payOpen()">${ic("wallet",18)}Payer ma cotisation</button>`:""}</div>
+${adm()&&pc?`<div class="card last" onclick="go('mem')" style="border-color:#f59e0b"><span class="ti" style="--a:#fb923c;--b:#ef4444;--d:#9f1239">${ic("users",22)}</span><div><small>Comptes à valider</small><b>${pc} demande${pc>1?"s":""} en attente</b></div><span class="mut">Voir</span></div>`:""}
+${li?`<div class="card last" onclick="go('inf')" style="border-radius:22px"><span class="ti" style="--a:#60a5fa;--b:#2563eb;--d:#1e3a8a">${ic("mega",22)}</span><div><small>Dernière info</small><b>${esc(li.t)}</b></div><span class="mut">Lire</span></div>`:""}
+${chartCard}`};
+
+/* ---------- Bandeaux de page colorés (Cotisations, Membres) ---------- */
+const band=(g,t,s,extra)=>`<div class="band" style="background:linear-gradient(165deg,${g})"><h1 style="color:#fff;font-size:28px">${t}</h1><div style="opacity:.85;font-weight:600;font-size:14px">${s}</div>${extra||""}</div>`;
+const _c2=V.cot;
+V.cot=function(){
+  let h=_c2.call(V);
+  const m=h.match(/<div class="hero"><small>Total versé[\s\S]*?<div class="bal"[^>]*>([^<]*)<\/div><\/div>/);
+  if(!m)return h;
+  h=h.replace(/^<div class="rw" style="margin-bottom:16px"><div><h1[^>]*>Cotisations<\/h1>[\s\S]*?<\/p><\/div><\/div>/,"").replace(m[0],"");
+  return band("#0b3c4d,#0e6b82 60%,#0891b2","Cotisations","Votre situation et celle de l’amicale",`<div class="k" style="color:#bdeefb;margin-top:14px">Total versé depuis le début</div><div style="font-size:34px;font-weight:800">${m[1].replace("FCFA","").trim()} <span style="font-size:16px;opacity:.85">FCFA</span></div>`)+h};
+const _a2=V.ann;
+V.ann=function(){
+  let h=_a2.call(V);
+  return h.replace(/^<div class="rw" style="margin-bottom:16px">[\s\S]*?<\/p><\/div><\/div>/,band("#2e1065,#5b21b6 60%,#7c3aed","Membres",S.dir.length+" membres actifs · profils visibles par tous"))};
 
 /* ---------- Barre du bas + pied de page ---------- */
 const TABS=[["dash","Accueil","home"],["cai","Caisse","wallet"],["cot","Cotisations","check"],["ann","Membres","users"],["prof","Profil","users"]];
@@ -115,6 +151,7 @@ render=function(){
   _r();
   document.querySelectorAll(".tabs").forEach(e=>e.remove());
   document.querySelectorAll(".ft").forEach(e=>e.innerHTML=FOOT);
+  const tp=document.querySelector(".top");if(tp){const g={cot:"#0b3c4d",ann:"#2e1065",prof:"#141b45",dash:"#141b45"}[cur];tp.style.background=g||"";}
   if(!U)return;
   const pc=adm()&&S.pays?S.pays.filter(p=>p.st=="pending").length:0,
    on=t=>t==cur||(t=="prof"&&cur=="prof"&&(!S.pid||S.pid==U.id))||(t=="ann"&&cur=="prof"&&S.pid&&S.pid!=U.id);
