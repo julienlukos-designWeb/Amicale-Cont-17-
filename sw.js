@@ -1,6 +1,6 @@
-// A.M.D — service worker minimal : l'application reste installable et s'ouvre même si le réseau est lent.
+// Amicale Contingent 17 Fatick — service worker minimal : l'application reste installable et s'ouvre même si le réseau est lent.
 // Réseau d'abord : les données et mises à jour sont toujours récentes ; le cache ne sert qu'en secours.
-const CACHE = 'amd-v1';
+const CACHE = 'amicale-c17-v2';
 self.addEventListener('install', e => { self.skipWaiting(); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
